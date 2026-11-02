@@ -1,6 +1,7 @@
 using MediatR;
 using SkyPort.Application.Common;
 using SkyPort.Application.Common.Constants;
+using SkyPort.Application.UseCases.Vuelos.Rules;
 using SkyPort.Domain.Exceptions;
 using SkyPort.Domain.Ports;
 
@@ -15,7 +16,7 @@ public sealed record UpdateVueloCommand(
     DateTime FechaSalida,
     DateTime FechaLlegada) : IRequest<Result>;
 
-public sealed class UpdateVueloCommandHandler(IUnitOfWork unitOfWork)
+public sealed class UpdateVueloCommandHandler(IUnitOfWork unitOfWork, VueloSchedulingRules schedulingRules)
     : IRequestHandler<UpdateVueloCommand, Result>
 {
     public async Task<Result> Handle(UpdateVueloCommand request, CancellationToken cancellationToken)
@@ -51,6 +52,19 @@ public sealed class UpdateVueloCommandHandler(IUnitOfWork unitOfWork)
         if (validation is not null)
         {
             return Result.Failure(validation);
+        }
+
+        var schedulingResult = await schedulingRules.ValidateAsync(
+            input.AeronaveId,
+            input.PuertaId,
+            input.FechaSalida,
+            input.FechaLlegada,
+            vueloIdIgnorado: flight.VueloId,
+            esCreacion: false,
+            cancellationToken);
+        if (!schedulingResult.IsSuccess)
+        {
+            return Result.Failure(schedulingResult.Error!);
         }
 
         flight.NumeroVuelo = input.NumeroVuelo;

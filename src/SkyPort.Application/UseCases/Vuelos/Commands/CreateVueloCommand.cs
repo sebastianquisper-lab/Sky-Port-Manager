@@ -4,6 +4,7 @@ using SkyPort.Application.Common.Constants;
 using SkyPort.Domain.Entities;
 using SkyPort.Domain.Exceptions;
 using SkyPort.Domain.Ports;
+using SkyPort.Application.UseCases.Vuelos.Rules;
 
 namespace SkyPort.Application.UseCases.Vuelos.Commands;
 
@@ -15,7 +16,7 @@ public sealed record CreateVueloCommand(
     DateTime FechaSalida,
     DateTime FechaLlegada) : IRequest<Result<int>>;
 
-public sealed class CreateVueloCommandHandler(IUnitOfWork unitOfWork)
+public sealed class CreateVueloCommandHandler(IUnitOfWork unitOfWork, VueloSchedulingRules schedulingRules)
     : IRequestHandler<CreateVueloCommand, Result<int>>
 {
     public async Task<Result<int>> Handle(CreateVueloCommand request, CancellationToken cancellationToken)
@@ -37,6 +38,19 @@ public sealed class CreateVueloCommandHandler(IUnitOfWork unitOfWork)
         if (validation is not null)
         {
             return Result<int>.Failure(validation);
+        }
+
+        var schedulingResult = await schedulingRules.ValidateAsync(
+            input.AeronaveId,
+            input.PuertaId,
+            input.FechaSalida,
+            input.FechaLlegada,
+            vueloIdIgnorado: null,
+            esCreacion: true,
+            cancellationToken);
+        if (!schedulingResult.IsSuccess)
+        {
+            return Result<int>.Failure(schedulingResult.Error!);
         }
 
         var flight = new Vuelo
@@ -70,17 +84,6 @@ public sealed class CreateVueloCommandHandler(IUnitOfWork unitOfWork)
         if (await unitOfWork.Rutas.GetByIdAsync(input.RutaId, cancellationToken) is null)
         {
             return Error.Validation("La ruta seleccionada no existe.");
-        }
-
-        if (await unitOfWork.Aeronaves.GetByIdAsync(input.AeronaveId, cancellationToken) is null)
-        {
-            return Error.Validation("La aeronave seleccionada no existe.");
-        }
-
-        if (input.PuertaId.HasValue &&
-            await unitOfWork.Puertas.GetByIdAsync(input.PuertaId.Value, cancellationToken) is null)
-        {
-            return Error.Validation("La puerta seleccionada no existe.");
         }
 
         return null;
