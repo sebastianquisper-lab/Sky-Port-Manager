@@ -34,9 +34,10 @@ No guardes esos valores en `appsettings.json`, en un commit ni en un mensaje del
 Cuando estén disponibles los scripts del equipo, ejecútalos desde un cliente MySQL en este orden:
 
 1. `database/01_schema.sql`
-2. `database/02_seed.sql`
+2. `database/02_identity.sql`
+3. `database/03_seed.sql` (pendiente de la tarea de datos de prueba).
 
-Todavía no hay scripts SQL en `database/`; deben agregarse antes de poder realizar este paso.
+Los scripts `01_schema.sql` y `02_identity.sql` ya están disponibles. El segundo crea las siete tablas estándar de ASP.NET Core Identity con MySQL, sin migraciones; se puede ejecutar más de una vez. Consulta [IDENTITY.md](IDENTITY.md) para su generación y validación. La preparación completa para S07 sigue pendiente hasta disponer de `03_seed.sql` y ejecutar los scripts en la base local del integrante.
 
 ## 4. Restaura las herramientas y compila
 
