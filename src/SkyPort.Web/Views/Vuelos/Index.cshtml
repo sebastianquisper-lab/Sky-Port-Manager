@@ -1,0 +1,97 @@
+@model SkyPort.Web.Models.VuelosIndexViewModel
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Vuelos";
+    var canManageFlights = User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos);
+    var states = new[] { EstadoVuelo.Programado, EstadoVuelo.Embarcando, EstadoVuelo.Retrasado, EstadoVuelo.Despegado, EstadoVuelo.Cancelado };
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+    <div>
+        <h1 class="h3 mb-1">Vuelos</h1>
+        <p class="text-muted mb-0">Consulta la programación y el estado de los vuelos.</p>
+    </div>
+    @if (canManageFlights)
+    {
+        <a asp-action="Create" class="btn btn-primary">Crear vuelo</a>
+    }
+</div>
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<form asp-action="Index" method="get" class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-2">
+        <label for="desde" class="form-label">Desde</label>
+        <input id="desde" name="desde" type="date" value="@Model.Desde?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-sm-6 col-lg-2">
+        <label for="hasta" class="form-label">Hasta</label>
+        <input id="hasta" name="hasta" type="date" value="@Model.Hasta?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-sm-6 col-lg-2">
+        <label for="estado" class="form-label">Estado</label>
+        <select id="estado" name="estado" class="form-select">
+            <option value="">Todos</option>
+            @foreach (var state in states)
+            {
+                <option value="@state" selected="@(state == Model.Estado)">@state</option>
+            }
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-2">
+        <label for="rutaId" class="form-label">Ruta</label>
+        <select id="rutaId" name="rutaId" class="form-select">
+            <option value="">Todas</option>
+            @foreach (var route in Model.Rutas)
+            {
+                <option value="@route.RutaId" selected="@(route.RutaId == Model.RutaId)">@route.CodigoOrigen–@route.CodigoDestino</option>
+            }
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-2">
+        <label for="aerolineaId" class="form-label">Aerolínea</label>
+        <select id="aerolineaId" name="aerolineaId" class="form-select">
+            <option value="">Todas</option>
+            @foreach (var airline in Model.Aerolineas)
+            {
+                <option value="@airline.AerolineaId" selected="@(airline.AerolineaId == Model.AerolineaId)">@airline.Nombre</option>
+            }
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-2">
+        <label for="numeroVuelo" class="form-label">Número</label>
+        <input id="numeroVuelo" name="numeroVuelo" value="@Model.NumeroVuelo" class="form-control" />
+    </div>
+    <div class="col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-primary">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+</form>
+
+<p class="text-muted">@Model.Total vuelos encontrados</p>
+@if (Model.Vuelos.Count == 0)
+{
+    <div class="alert alert-info">No se encontraron vuelos con esos filtros.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Número</th><th>Ruta</th><th>Aerolínea</th><th>Salida</th><th>Estado</th><th>Puerta</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var flight in Model.Vuelos)
+            {
+                <tr>
+                    <td>@flight.NumeroVuelo</td>
+                    <td>@flight.Ruta</td>
+                    <td>@flight.Aerolinea</td>
+                    <td>@flight.FechaSalida.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td><span class="badge bg-secondary">@flight.Estado</span></td>
+                    <td>@(flight.Puerta ?? "Sin asignar")</td>
+                    <td><a asp-action="Details" asp-route-id="@flight.VueloId" class="btn btn-sm btn-outline-secondary">Ver</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <partial name="_Pagination" />
+}

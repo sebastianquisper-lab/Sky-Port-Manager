@@ -1,0 +1,19 @@
+@model SkyPort.Web.Models.VueloViewModel
+@{
+    ViewData["Title"] = "Eliminar vuelo";
+    var flight = Model.Detalle!;
+}
+
+<h1 class="h3 mb-3">Eliminar vuelo</h1>
+<div class="alert alert-warning">¿Confirmas que deseas eliminar el vuelo @flight.NumeroVuelo?</div>
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+<dl class="row">
+    <dt class="col-sm-3">Ruta</dt><dd class="col-sm-9">@flight.CodigoOrigen → @flight.CodigoDestino</dd>
+    <dt class="col-sm-3">Salida</dt><dd class="col-sm-9">@flight.FechaSalida.ToString("dd/MM/yyyy HH:mm")</dd>
+    <dt class="col-sm-3">Estado</dt><dd class="col-sm-9">@flight.Estado</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@flight.VueloId" method="post">
+    <input type="hidden" name="id" value="@flight.VueloId" />
+    <button type="submit" class="btn btn-danger">Confirmar eliminación</button>
+    <a asp-action="Details" asp-route-id="@flight.VueloId" class="btn btn-outline-secondary">Cancelar</a>
+</form>

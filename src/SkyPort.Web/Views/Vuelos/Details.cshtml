@@ -1,0 +1,59 @@
+@model SkyPort.Web.Models.VueloViewModel
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Detalle de vuelo";
+    var flight = Model.Detalle!;
+    var canManageFlights = User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+    <div>
+        <h1 class="h3 mb-1">Vuelo @flight.NumeroVuelo</h1>
+        <span class="badge bg-secondary">@flight.Estado</span>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        @if (canManageFlights)
+        {
+            <a asp-action="Edit" asp-route-id="@flight.VueloId" class="btn btn-primary">Editar</a>
+            <a asp-action="Delete" asp-route-id="@flight.VueloId" class="btn btn-outline-danger">Eliminar</a>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver a vuelos</a>
+    </div>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Ruta</dt><dd class="col-sm-9">@flight.CodigoOrigen · @flight.CiudadOrigen → @flight.CodigoDestino · @flight.CiudadDestino</dd>
+    <dt class="col-sm-3">Aeronave</dt><dd class="col-sm-9">@flight.Matricula · @flight.Modelo</dd>
+    <dt class="col-sm-3">Aerolínea</dt><dd class="col-sm-9">@flight.Aerolinea</dd>
+    <dt class="col-sm-3">Capacidad</dt><dd class="col-sm-9">@flight.Capacidad</dd>
+    <dt class="col-sm-3">Salida</dt><dd class="col-sm-9">@flight.FechaSalida.ToString("dd/MM/yyyy HH:mm")</dd>
+    <dt class="col-sm-3">Llegada</dt><dd class="col-sm-9">@flight.FechaLlegada.ToString("dd/MM/yyyy HH:mm")</dd>
+    <dt class="col-sm-3">Puerta</dt><dd class="col-sm-9">@(flight.Terminal is null || flight.Puerta is null ? "Sin asignar" : $"{flight.Terminal} · {flight.Puerta}")</dd>
+    <dt class="col-sm-3">Reservas confirmadas</dt><dd class="col-sm-9">@flight.ReservasConfirmadas</dd>
+</dl>
+
+<section class="mb-4">
+    <h2 class="h5">Operación</h2>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="/Tripulacion/Vuelo/@flight.VueloId" class="btn btn-outline-secondary">Tripulación</a>
+        <a href="/Reservas/Vuelo/@flight.VueloId" class="btn btn-outline-secondary">Reservas</a>
+        <a href="/Embarque/Vuelo/@flight.VueloId" class="btn btn-outline-secondary">Embarque</a>
+    </div>
+</section>
+
+@if (canManageFlights && Model.EstadosSiguientes.Count > 0)
+{
+    <section>
+        <h2 class="h5">Cambiar estado</h2>
+        <div class="d-flex flex-wrap gap-2">
+            @foreach (var nextState in Model.EstadosSiguientes)
+            {
+                <form asp-action="CambiarEstado" method="post">
+                    <input type="hidden" name="id" value="@flight.VueloId" />
+                    <input type="hidden" name="nuevoEstado" value="@nextState" />
+                    <button type="submit" class="btn btn-outline-primary">@nextState</button>
+                </form>
+            }
+        </div>
+    </section>
+}

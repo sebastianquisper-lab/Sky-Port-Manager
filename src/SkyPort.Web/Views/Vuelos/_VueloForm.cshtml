@@ -1,0 +1,60 @@
+@model SkyPort.Web.Models.VueloViewModel
+
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <form asp-action="@(Model.VueloId == 0 ? "Create" : "Edit")" asp-route-id="@Model.VueloId" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input asp-for="VueloId" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="NumeroVuelo" class="form-label"></label>
+                <input asp-for="NumeroVuelo" class="form-control text-uppercase" autocomplete="off" />
+                <span asp-validation-for="NumeroVuelo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="RutaId" class="form-label"></label>
+                <select asp-for="RutaId" class="form-select">
+                    <option value="">Selecciona una ruta</option>
+                    @foreach (var route in Model.Rutas)
+                    {
+                        <option value="@route.RutaId">@route.CodigoOrigen · @route.CiudadOrigen → @route.CodigoDestino · @route.CiudadDestino</option>
+                    }
+                </select>
+                <span asp-validation-for="RutaId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AeronaveId" class="form-label"></label>
+                <select asp-for="AeronaveId" class="form-select">
+                    <option value="">Selecciona una aeronave</option>
+                    @foreach (var aircraft in Model.Aeronaves)
+                    {
+                        <option value="@aircraft.AeronaveId">@aircraft.Matricula · @aircraft.Modelo · @aircraft.Aerolinea (@aircraft.Capacidad)</option>
+                    }
+                </select>
+                <span asp-validation-for="AeronaveId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PuertaId" class="form-label"></label>
+                <select asp-for="PuertaId" class="form-select">
+                    <option value="">Sin asignar</option>
+                    @foreach (var gate in Model.Puertas)
+                    {
+                        <option value="@gate.PuertaId">@gate.Terminal · @gate.Codigo</option>
+                    }
+                </select>
+                <span asp-validation-for="PuertaId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="FechaSalida" class="form-label"></label>
+                <input asp-for="FechaSalida" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+                <span asp-validation-for="FechaSalida" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="FechaLlegada" class="form-label"></label>
+                <input asp-for="FechaLlegada" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+                <span asp-validation-for="FechaLlegada" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
