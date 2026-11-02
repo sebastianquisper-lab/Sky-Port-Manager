@@ -1,0 +1,18 @@
+@model SkyPort.Web.Models.RutaViewModel
+@{
+    ViewData["Title"] = "Eliminar ruta";
+}
+
+<h1 class="h3 mb-3">Eliminar ruta</h1>
+<div class="alert alert-warning">¿Confirmas que deseas eliminar esta ruta?</div>
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+<dl class="row">
+    <dt class="col-sm-3">Origen</dt><dd class="col-sm-9">@Model.CodigoOrigen · @Model.CiudadOrigen</dd>
+    <dt class="col-sm-3">Destino</dt><dd class="col-sm-9">@Model.CodigoDestino · @Model.CiudadDestino</dd>
+    <dt class="col-sm-3">Duración</dt><dd class="col-sm-9">@Model.DuracionMinutos minutos</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.RutaId" method="post">
+    <input type="hidden" name="id" value="@Model.RutaId" />
+    <button type="submit" class="btn btn-danger">Confirmar eliminación</button>
+    <a asp-action="Details" asp-route-id="@Model.RutaId" class="btn btn-outline-secondary">Cancelar</a>
+</form>
