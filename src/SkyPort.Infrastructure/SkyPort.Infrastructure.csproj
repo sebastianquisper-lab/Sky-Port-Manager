@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\SkyPort.Domain\SkyPort.Domain.csproj" />
+    <ProjectReference Include="..\SkyPort.Application\SkyPort.Application.csproj" />
+    <ProjectReference Include="..\SkyPort.Persistence\SkyPort.Persistence.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
