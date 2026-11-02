@@ -63,9 +63,14 @@ public static class IdentitySeeder
             var userResult = await userManager.CreateAsync(adminUser, adminPassword);
             if (!userResult.Succeeded)
             {
-                logger.LogWarning("Initial administrator could not be created. Check AdminSeed settings.");
+                var errorCodes = string.Join(", ", userResult.Errors.Select(error => error.Code));
+                logger.LogWarning(
+                    "Initial administrator could not be created. Identity validation errors: {ErrorCodes}.",
+                    errorCodes);
                 return;
             }
+
+            logger.LogInformation("Initial administrator account was created.");
         }
 
         if (!await userManager.IsInRoleAsync(adminUser, Roles.Administrador))
@@ -73,8 +78,14 @@ public static class IdentitySeeder
             var roleResult = await userManager.AddToRoleAsync(adminUser, Roles.Administrador);
             if (!roleResult.Succeeded)
             {
-                logger.LogWarning("Initial administrator could not be assigned the administrator role.");
+                var errorCodes = string.Join(", ", roleResult.Errors.Select(error => error.Code));
+                logger.LogWarning(
+                    "Initial administrator could not be assigned the administrator role. Identity errors: {ErrorCodes}.",
+                    errorCodes);
+                return;
             }
         }
+
+        logger.LogInformation("Initial administrator has the administrator role.");
     }
 }
