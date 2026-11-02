@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
 using SkyPort.Application.Ports;
 using SkyPort.Domain.Ports;
 using SkyPort.Infrastructure.Repositories;
 using SkyPort.Infrastructure.Services;
 using SkyPort.Persistence.Context;
+using SkyPort.Persistence.Identity;
 
 namespace SkyPort.Infrastructure.Configuration;
 
@@ -27,12 +29,42 @@ public static class InfrastructureServicesExtensions
 
         var serverVersion = DetectServerVersion(connectionString);
         services.AddDbContext<SkyPortContext>(options => options.UseMySql(connectionString, serverVersion));
+        services.AddSkyPortIdentity();
         services.AddDbContext<SkyPortIdentityDbContext>(options => options.UseMySql(connectionString, serverVersion));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         RegisterApplicationPortImplementations(services);
+
+        return services;
+    }
+
+    public static IServiceCollection AddSkyPortIdentity(this IServiceCollection services)
+    {
+        services
+            .AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.User.RequireUniqueEmail = true;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            })
+            .AddEntityFrameworkStores<SkyPortIdentityDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Account/Login";
+            options.AccessDeniedPath = "/Account/AccessDenied";
+            options.Cookie.HttpOnly = true;
+            options.ExpireTimeSpan = TimeSpan.FromHours(8);
+            options.SlidingExpiration = true;
+        });
 
         return services;
     }
