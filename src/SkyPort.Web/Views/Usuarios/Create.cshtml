@@ -1,0 +1,47 @@
+@model SkyPort.Web.Models.Users.CrearUsuarioViewModel
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Crear usuario";
+    var roles = new[] { Roles.Administrador, Roles.OperadorVuelos, Roles.AgenteCheckIn };
+}
+
+<h1 class="h3 mb-3">Crear usuario</h1>
+<div class="row">
+    <div class="col-md-7 col-lg-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="NombreCompleto" class="form-label"></label>
+                <input asp-for="NombreCompleto" class="form-control" autocomplete="name" />
+                <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="form-text">Debe tener al menos 8 caracteres e incluir un número.</div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" class="form-select">
+                    @foreach (var role in roles)
+                    {
+                        <option value="@role">@role</option>
+                    }
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear usuario</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
