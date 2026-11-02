@@ -1,48 +1,96 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@using SkyPort.Application.Common.Constants
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SkyPort.Web</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - SkyPort Manager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SkyPort.Web.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SkyPort.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-dark skyport-navbar">
+            <div class="container-fluid px-lg-4">
+                <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">SkyPort Manager</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation"
+                        aria-controls="mainNavigation" aria-expanded="false" aria-label="Abrir navegación">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                <div class="collapse navbar-collapse" id="mainNavigation">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos) || User.IsInRole(Roles.AgenteCheckIn))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Operaciones</a>
+                                <ul class="dropdown-menu">
+                                    @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos) || User.IsInRole(Roles.AgenteCheckIn))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Vuelos" asp-action="Index">Vuelos</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Rutas" asp-action="Index">Rutas</a></li>
+                                    }
+                                    @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Aerolineas" asp-action="Index">Aerolíneas</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Aeronaves" asp-action="Index">Aeronaves</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Personal" asp-action="Index">Personal</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos) || User.IsInRole(Roles.AgenteCheckIn))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pasajeros</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Pasajeros" asp-action="Index">Pasajeros</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Reservas" asp-action="Index">Reservas</a></li>
+                                    <li><a class="dropdown-item" asp-controller="CheckIn" asp-action="Index">Check-in</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Embarque" asp-action="Index">Embarque</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Equipaje" asp-action="Index">Equipaje</a></li>
+                                </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos) || User.IsInRole(Roles.AgenteCheckIn))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Reportes" asp-action="Index">Reportes</a></li>
+                        }
+                        @if (User.IsInRole(Roles.Administrador))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administración</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="d-flex align-items-center gap-3 user-menu">
+                            <span class="text-white">@User.Identity.Name</span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                <button type="submit" class="btn btn-sm btn-outline-light">Cerrar sesión</button>
+                            </form>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container py-4">
+        <partial name="_Alerts" />
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - SkyPort.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer class="site-footer">
+        <div class="container py-3">&copy; @DateTime.Now.Year SkyPort Manager <span class="footer-divider">·</span> Gestión aeroportuaria</div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
