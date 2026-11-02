@@ -1,0 +1,24 @@
+@model SkyPort.Web.Models.RutaViewModel
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Detalle de ruta";
+    var canManageRoutes = User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+    <h1 class="h3 mb-0">Detalle de ruta</h1>
+    <div class="d-flex gap-2">
+        @if (canManageRoutes)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.RutaId" class="btn btn-primary">Editar</a>
+            <a asp-action="Delete" asp-route-id="@Model.RutaId" class="btn btn-outline-danger">Eliminar</a>
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver a rutas</a>
+    </div>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Origen</dt><dd class="col-sm-9">@Model.CodigoOrigen · @Model.CiudadOrigen</dd>
+    <dt class="col-sm-3">Destino</dt><dd class="col-sm-9">@Model.CodigoDestino · @Model.CiudadDestino</dd>
+    <dt class="col-sm-3">Duración</dt><dd class="col-sm-9">@Model.DuracionMinutos minutos</dd>
+</dl>

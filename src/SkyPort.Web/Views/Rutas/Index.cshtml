@@ -1,0 +1,54 @@
+@model IReadOnlyList<SkyPort.Application.UseCases.Rutas.Dtos.RutaDto>
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Rutas";
+    var texto = ViewData["Texto"] as string;
+    var canManageRoutes = User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.OperadorVuelos);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+    <div>
+        <h1 class="h3 mb-1">Rutas</h1>
+        <p class="text-muted mb-0">Consulta los trayectos y sus duraciones.</p>
+    </div>
+    @if (canManageRoutes)
+    {
+        <a asp-action="Create" class="btn btn-primary">Crear ruta</a>
+    }
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 mb-4">
+    <div class="col-sm-8 col-md-6">
+        <label for="texto" class="visually-hidden">Buscar por ciudad o código</label>
+        <input id="texto" name="texto" value="@texto" class="form-control" placeholder="Buscar por ciudad o código" />
+    </div>
+    <div class="col-auto"><button type="submit" class="btn btn-outline-primary">Buscar</button></div>
+    @if (!string.IsNullOrWhiteSpace(texto))
+    {
+        <div class="col-auto"><a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a></div>
+    }
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No se encontraron rutas.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Origen</th><th>Destino</th><th>Duración</th><th>Detalle</th></tr></thead>
+            <tbody>
+            @foreach (var ruta in Model)
+            {
+                <tr>
+                    <td><strong>@ruta.CodigoOrigen</strong> · @ruta.CiudadOrigen</td>
+                    <td><strong>@ruta.CodigoDestino</strong> · @ruta.CiudadDestino</td>
+                    <td>@ruta.DuracionMinutos min</td>
+                    <td><a asp-action="Details" asp-route-id="@ruta.RutaId" class="btn btn-sm btn-outline-secondary">Ver</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

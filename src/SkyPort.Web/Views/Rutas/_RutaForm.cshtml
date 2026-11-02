@@ -1,0 +1,37 @@
+@model SkyPort.Web.Models.RutaViewModel
+
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <form asp-action="@(Model.RutaId == 0 ? "Create" : "Edit")" asp-route-id="@Model.RutaId" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input asp-for="RutaId" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="CodigoOrigen" class="form-label"></label>
+                <input asp-for="CodigoOrigen" class="form-control text-uppercase" maxlength="3" autocomplete="off" />
+                <span asp-validation-for="CodigoOrigen" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CiudadOrigen" class="form-label"></label>
+                <input asp-for="CiudadOrigen" class="form-control" />
+                <span asp-validation-for="CiudadOrigen" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CodigoDestino" class="form-label"></label>
+                <input asp-for="CodigoDestino" class="form-control text-uppercase" maxlength="3" autocomplete="off" />
+                <span asp-validation-for="CodigoDestino" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CiudadDestino" class="form-label"></label>
+                <input asp-for="CiudadDestino" class="form-control" />
+                <span asp-validation-for="CiudadDestino" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DuracionMinutos" class="form-label"></label>
+                <input asp-for="DuracionMinutos" class="form-control" min="1" />
+                <span asp-validation-for="DuracionMinutos" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
