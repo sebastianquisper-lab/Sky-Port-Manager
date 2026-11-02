@@ -1,0 +1,22 @@
+﻿# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider / IntelliJ
+.idea/
+*.sln.iml
+
+# Local configuration and secrets
+appsettings.Development.json
+secrets.json
+
+# Logs and test results
+*.log
+TestResults/
