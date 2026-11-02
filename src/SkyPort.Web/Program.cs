@@ -1,19 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using SkyPort.Application.Configuration;
+﻿using SkyPort.Application.Configuration;
 using SkyPort.Infrastructure.Configuration;
 using SkyPort.Infrastructure.Services;
+using SkyPort.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-});
+builder.Services.AddSkyPortAuthorization();
 
 var app = builder.Build();
 
