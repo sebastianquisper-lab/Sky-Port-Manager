@@ -122,3 +122,19 @@ DELIMITER ;
 
 CALL sp_instalar_identity();
 DROP PROCEDURE sp_instalar_identity;
+
+-- Datos propios del sistema de usuarios (compatible con una instalación Identity existente).
+DROP PROCEDURE IF EXISTS sp_actualizar_usuarios_skyport;
+DELIMITER //
+CREATE PROCEDURE sp_actualizar_usuarios_skyport()
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'skyport_db' AND table_name = 'AspNetUsers' AND column_name = 'NombreCompleto'
+    ) THEN
+        ALTER TABLE `AspNetUsers` ADD COLUMN `NombreCompleto` varchar(120) NOT NULL DEFAULT '';
+    END IF;
+END //
+DELIMITER ;
+CALL sp_actualizar_usuarios_skyport();
+DROP PROCEDURE sp_actualizar_usuarios_skyport;
