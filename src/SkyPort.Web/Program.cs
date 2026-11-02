@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using SkyPort.Application.Configuration;
 using SkyPort.Infrastructure.Configuration;
+using SkyPort.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,11 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    await IdentitySeeder.SeedAsync(scope.ServiceProvider);
+}
 
 if (!app.Environment.IsDevelopment())
 {
