@@ -1,0 +1,16 @@
+@model SkyPort.Web.Models.PasajeroViewModel
+@{
+    ViewData["Title"] = "Eliminar pasajero";
+}
+
+<h1 class="h2 mb-4">Eliminar pasajero</h1>
+<div class="card border-danger shadow-sm">
+    <div class="card-body">
+        <p>¿Confirmas que deseas eliminar a <strong>@Model.Nombres @Model.Apellidos</strong> (@Model.TipoDocumento @Model.NumeroDocumento)?</p>
+        <p class="text-secondary">No se podrá eliminar si el pasajero tiene reservas.</p>
+        <form asp-action="Delete" asp-route-id="@Model.PasajeroId" method="post">
+            <button type="submit" class="btn btn-danger">Eliminar pasajero</button>
+            <a asp-action="Details" asp-route-id="@Model.PasajeroId" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>

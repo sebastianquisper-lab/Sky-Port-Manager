@@ -1,0 +1,74 @@
+@model SkyPort.Application.Common.PagedResult<SkyPort.Application.UseCases.Pasajeros.Dtos.PasajeroDto>
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Pasajeros";
+    var puedeEditar = User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.AgenteCheckIn);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Pasajeros</h1>
+        <p class="text-secondary mb-0">Busca y consulta los datos de los pasajeros.</p>
+    </div>
+    @if (puedeEditar)
+    {
+        <a class="btn btn-primary" asp-action="Create">Registrar pasajero</a>
+    }
+</div>
+
+<form asp-action="Index" method="get" class="card card-body mb-3">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-md-8">
+            <label for="busqueda" class="form-label">Documento, nombres o apellidos</label>
+            <input id="busqueda" name="busqueda" value="@Context.Request.Query["busqueda"]" class="form-control" />
+        </div>
+        <div class="col-12 col-md-auto">
+            <button type="submit" class="btn btn-outline-primary">Buscar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Pasajero</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col"><span class="visually-hidden">Acciones</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Items.Count == 0)
+                {
+                    <tr><td colspan="4" class="text-center text-secondary py-4">No se encontraron pasajeros.</td></tr>
+                }
+                else
+                {
+                    @foreach (var pasajero in Model.Items)
+                    {
+                        <tr>
+                            <th scope="row">@pasajero.Apellidos, @pasajero.Nombres</th>
+                            <td>@pasajero.TipoDocumento @pasajero.NumeroDocumento</td>
+                            <td>@(pasajero.Email ?? "—")</td>
+                            <td class="text-end text-nowrap">
+                                <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@pasajero.PasajeroId">Ver</a>
+                                @if (puedeEditar)
+                                {
+                                    <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@pasajero.PasajeroId">Editar</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <span class="small text-secondary">@Model.TotalCount pasajeros · página @Model.PageNumber de @Model.TotalPages</span>
+    <partial name="_Pagination" />
+</div>
