@@ -1,0 +1,47 @@
+@model IReadOnlyList<SkyPort.Application.UseCases.Reservas.Dtos.VueloAbiertoDto>
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Reservas";
+    var puedeReservar = User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.AgenteCheckIn);
+}
+
+<div class="mb-4">
+    <h1 class="h2 mb-1">Reservas</h1>
+    <p class="text-secondary mb-0">Elige un vuelo con asientos disponibles para consultar o crear reservas.</p>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr><th>Vuelo</th><th>Ruta</th><th>Salida</th><th>Estado</th><th>Ocupación</th><th><span class="visually-hidden">Acciones</span></th></tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center text-secondary py-4">No hay vuelos con asientos disponibles.</td></tr>
+                }
+                else
+                {
+                    @foreach (var vuelo in Model)
+                    {
+                        <tr>
+                            <th scope="row">@vuelo.NumeroVuelo</th>
+                            <td>@vuelo.CodigoOrigen (@vuelo.CiudadOrigen) → @vuelo.CodigoDestino (@vuelo.CiudadDestino)</td>
+                            <td>@vuelo.FechaSalida.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><span class="badge @(vuelo.Estado == EstadoVuelo.Retrasado ? "badge-estado-retrasado" : "badge-estado-programado")">@vuelo.Estado</span></td>
+                            <td>@vuelo.ReservasConfirmadas / @vuelo.Capacidad <span class="text-secondary">(@vuelo.AsientosLibres libres)</span></td>
+                            <td class="text-end text-nowrap">
+                                <a class="btn btn-sm btn-outline-primary" asp-action="Vuelo" asp-route-vueloId="@vuelo.VueloId">Ver reservas</a>
+                                @if (puedeReservar)
+                                {
+                                    <a class="btn btn-sm btn-primary" asp-action="Create" asp-route-vueloId="@vuelo.VueloId">Reservar</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

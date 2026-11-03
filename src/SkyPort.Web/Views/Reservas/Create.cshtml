@@ -1,0 +1,91 @@
+@model SkyPort.Web.Models.CreateReservaViewModel
+@using SkyPort.Application.UseCases.Reservas
+@{
+    ViewData["Title"] = "Crear reserva";
+    var letrasAsiento = "ABCDEF";
+}
+
+<div class="mb-4">
+    <h1 class="h2 mb-1">Reservar asiento</h1>
+    <p class="text-secondary mb-0">@Model.NumeroVuelo · @Model.Ruta · @Model.FechaSalida.ToString("dd/MM/yyyy HH:mm")</p>
+</div>
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<section class="card shadow-sm mb-4">
+    <div class="card-header bg-white"><h2 class="h5 mb-0">Buscar pasajero</h2></div>
+    <div class="card-body">
+        <form asp-action="Create" method="get" class="row g-3 align-items-end">
+            <input type="hidden" name="vueloId" value="@Model.VueloId" />
+            <div class="col-md-4">
+                <label asp-for="TipoDocumento" class="form-label"></label>
+                <select asp-for="TipoDocumento" class="form-select">
+                    <option value="">Selecciona una opción</option><option value="DNI">DNI</option><option value="Pasaporte">Pasaporte</option><option value="CE">CE</option>
+                </select>
+            </div>
+            <div class="col-md-5"><label asp-for="NumeroDocumento" class="form-label"></label><input asp-for="NumeroDocumento" class="form-control" /></div>
+            <div class="col-md-3"><button type="submit" class="btn btn-outline-primary">Buscar pasajero</button></div>
+        </form>
+        @if (Model.PasajeroId is null && Model.PasajeroNoEncontrado)
+        {
+            <div class="mt-3"><a asp-controller="Pasajeros" asp-action="Create" class="btn btn-sm btn-outline-secondary">Registrar un pasajero nuevo</a></div>
+        }
+    </div>
+</section>
+
+@if (Model.PasajeroId is not null)
+{
+    <section class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h2 class="h5 mb-0">Selecciona un asiento</h2>
+            <span class="text-secondary small">@Model.AsientosLibres asientos libres de @Model.Capacidad</span>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info"><strong>Pasajero:</strong> @Model.NombrePasajero (@Model.TipoDocumento @Model.NumeroDocumento)</div>
+            @if (Model.AsientosLibres == 0)
+            {
+                <div class="alert alert-warning">El vuelo ya no tiene asientos disponibles.</div>
+            }
+            <form asp-action="Create" method="post">
+                <input asp-for="VueloId" type="hidden" />
+                <input asp-for="PasajeroId" type="hidden" />
+                <input asp-for="NombrePasajero" type="hidden" />
+                <input asp-for="TipoDocumento" type="hidden" />
+                <input asp-for="NumeroDocumento" type="hidden" />
+                <fieldset>
+                    <legend class="form-label">Asientos</legend>
+                    <div class="d-flex flex-wrap gap-3 small mb-3" aria-label="Leyenda del mapa">
+                        <span><span class="badge text-bg-light border">Disponible</span></span>
+                        <span><span class="badge text-bg-secondary">Ocupado</span></span>
+                    </div>
+                    <div class="seat-map" role="group" aria-label="Mapa de asientos">
+                        @for (var fila = 1; fila <= AsientoLayout.Filas(Model.Capacidad); fila++)
+                        {
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="text-secondary small seat-row-number">@fila</span>
+                                @for (var columna = 0; columna < letrasAsiento.Length; columna++)
+                                {
+                                    var asiento = $"{fila}{letrasAsiento[columna]}";
+                                    var valido = AsientoLayout.EsValido(asiento, Model.Capacidad);
+                                    var ocupado = Model.AsientosOcupados.Contains(asiento, StringComparer.OrdinalIgnoreCase);
+                                    var deshabilitado = !valido || ocupado;
+                                    <div class="form-check seat-option m-0">
+                                        <input class="form-check-input" type="radio" asp-for="Asiento" id="seat-@asiento" value="@asiento" disabled="@deshabilitado" />
+                                        <label class="form-check-label seat-label @(ocupado ? "seat-occupied" : !valido ? "seat-invalid" : "")" for="seat-@asiento" title="@(ocupado ? "Asiento ocupado" : asiento)">
+                                            @(valido ? asiento : "—")
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <span asp-validation-for="Asiento" class="text-danger"></span>
+                </fieldset>
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary" disabled="@(Model.AsientosLibres == 0)">Crear reserva</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </section>
+}

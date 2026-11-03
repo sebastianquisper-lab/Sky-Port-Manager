@@ -104,6 +104,55 @@ main {
   --bs-pagination-active-border-color: var(--skyport-navy);
 }
 
+.seat-map {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: .5rem 0;
+}
+
+.seat-row-number {
+  min-width: 1.5rem;
+  text-align: right;
+}
+
+.seat-label {
+  display: inline-flex;
+  min-width: 3rem;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  padding: .35rem;
+  border: 1px solid var(--skyport-border);
+  border-radius: .4rem;
+  cursor: pointer;
+}
+
+.seat-option .form-check-input {
+  position: absolute;
+  opacity: 0;
+}
+
+.seat-option .form-check-input:checked + .seat-label {
+  color: #172b3b;
+  background: var(--skyport-accent);
+  border-color: var(--skyport-accent);
+}
+
+.seat-option .form-check-input:focus-visible + .seat-label {
+  outline: 2px solid var(--skyport-navy);
+  outline-offset: 2px;
+}
+
+.seat-option .form-check-input:disabled + .seat-label {
+  cursor: not-allowed;
+}
+
+.seat-occupied,
+.seat-invalid {
+  color: #647482;
+  background: #e8edf1;
+}
+
 @media (max-width: 991.98px) {
   .user-menu {
     align-items: flex-start !important;

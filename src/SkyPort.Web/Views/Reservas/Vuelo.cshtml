@@ -1,0 +1,72 @@
+@model IReadOnlyList<SkyPort.Application.UseCases.Reservas.Dtos.ReservaDto>
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = Model.FirstOrDefault()?.NumeroVuelo is string numero ? $"Reservas {numero}" : "Reservas del vuelo";
+    var puedeGestionar = User.IsInRole(Roles.Administrador) || User.IsInRole(Roles.AgenteCheckIn);
+    var vueloId = Convert.ToInt32(ViewData["VueloId"]);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Reservas del vuelo @(Model.FirstOrDefault()?.NumeroVuelo ?? $"#{vueloId}")</h1>
+        @if (Model.FirstOrDefault() is { } primeraReserva)
+        {
+            <p class="text-secondary mb-0">@primeraReserva.Ruta · @primeraReserva.FechaSalida.ToString("dd/MM/yyyy HH:mm")</p>
+        }
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" asp-action="Index">Volver a vuelos</a>
+        @if (puedeGestionar)
+        {
+            <a class="btn btn-primary" asp-action="Create" asp-route-vueloId="@vueloId">Nueva reserva</a>
+        }
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead><tr><th>Código</th><th>Pasajero</th><th>Documento</th><th>Asiento</th><th>Estado</th><th><span class="visually-hidden">Acciones</span></th></tr></thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center text-secondary py-4">Este vuelo todavía no tiene reservas.</td></tr>
+                }
+                else
+                {
+                    @foreach (var reserva in Model)
+                    {
+                        <tr>
+                            <th scope="row">@reserva.Codigo</th>
+                            <td>@reserva.NombrePasajero</td>
+                            <td>@reserva.TipoDocumento @reserva.NumeroDocumento</td>
+                            <td>@reserva.Asiento</td>
+                            <td><span class="badge @(reserva.Estado == EstadoReserva.Confirmada ? "text-bg-success" : "text-bg-secondary")">@reserva.Estado</span></td>
+                            <td class="text-end text-nowrap">
+                                @if (reserva.Estado == EstadoReserva.Confirmada && puedeGestionar)
+                                {
+                                    @if (reserva.BoletoId is null)
+                                    {
+                                        <form asp-controller="Boletos" asp-action="Emitir" method="post" class="d-inline">
+                                            <input type="hidden" name="reservaId" value="@reserva.ReservaId" />
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">Emitir boleto</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="Boletos" asp-action="Details" asp-route-id="@reserva.BoletoId">Ver boleto</a>
+                                    }
+                                    <form asp-action="Cancelar" method="post" class="d-inline">
+                                        <input type="hidden" name="reservaId" value="@reserva.ReservaId" />
+                                        <input type="hidden" name="vueloId" value="@reserva.VueloId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Cancelar esta reserva?');">Cancelar</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
