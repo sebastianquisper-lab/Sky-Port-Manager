@@ -1,7 +1,103 @@
-﻿@{
-    ViewData["Title"] = "SkyPort Manager";
+@model SkyPort.Application.UseCases.Dashboard.Dtos.DashboardDto
+@using SkyPort.Application.Common.Constants
+@{
+    ViewData["Title"] = "Inicio";
+
+    string BadgeClass(string estado) => estado switch
+    {
+        EstadoVuelo.Programado => "badge-estado-programado",
+        EstadoVuelo.Embarcando => "badge-estado-embarcando",
+        EstadoVuelo.Retrasado => "badge-estado-retrasado",
+        EstadoVuelo.Despegado => "badge-estado-despegado",
+        EstadoVuelo.Cancelado => "badge-estado-cancelado",
+        _ => "text-bg-secondary"
+    };
 }
 
-<div class="text-center">
-    <h1 class="display-4">SkyPort Manager</h1>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Panel de inicio</h1>
+        <p class="text-secondary mb-0">Resumen de las operaciones del aeropuerto.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-primary" asp-controller="Vuelos" asp-action="Index">Ver vuelos</a>
+        <a class="btn btn-outline-primary" asp-controller="Reservas" asp-action="Index">Ver reservas</a>
+    </div>
 </div>
+
+<section aria-label="Resumen de hoy" class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h6 text-secondary">Vuelos de hoy</h2>
+                <p class="display-6 fw-semibold mb-3">@Model.VuelosHoy</p>
+                @if (Model.VuelosPorEstado.Count == 0)
+                {
+                    <span class="text-secondary small">Sin vuelos programados para hoy</span>
+                }
+                else
+                {
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var estado in Model.VuelosPorEstado)
+                        {
+                            <span class="badge @BadgeClass(estado.Estado)">@estado.Estado: @estado.Cantidad</span>
+                        }
+                    </div>
+                }
+            </div>
+        </article>
+    </div>
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h6 text-secondary">Reservas confirmadas hoy</h2>
+                <p class="display-6 fw-semibold mb-0">@Model.ReservasConfirmadasHoy</p>
+            </div>
+        </article>
+    </div>
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h6 text-secondary">Pasajeros abordados hoy</h2>
+                <p class="display-6 fw-semibold mb-0">@Model.PasajerosAbordadosHoy</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h2 class="h5 mb-0">Próximos vuelos</h2>
+        <a asp-controller="Vuelos" asp-action="Index" class="link-primary">Todos los vuelos</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Vuelo</th>
+                    <th scope="col">Ruta</th>
+                    <th scope="col">Salida</th>
+                    <th scope="col">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ProximosVuelos.Count == 0)
+                {
+                    <tr><td colspan="4" class="text-center text-secondary py-4">No hay vuelos próximos.</td></tr>
+                }
+                else
+                {
+                    @foreach (var vuelo in Model.ProximosVuelos)
+                    {
+                        <tr>
+                            <th scope="row">@vuelo.NumeroVuelo</th>
+                            <td>@vuelo.CodigoOrigen → @vuelo.CodigoDestino</td>
+                            <td>@vuelo.FechaSalida.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><span class="badge @BadgeClass(vuelo.Estado)">@vuelo.Estado</span></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
