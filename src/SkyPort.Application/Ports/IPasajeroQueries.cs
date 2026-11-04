@@ -1,5 +1,5 @@
 using SkyPort.Application.Common;
-using SkyPort.Application.UseCases.Pasajeros.Dtos;
+using SkyPort.Application.Dtos.Pasajeros;
 
 namespace SkyPort.Application.Ports;
 

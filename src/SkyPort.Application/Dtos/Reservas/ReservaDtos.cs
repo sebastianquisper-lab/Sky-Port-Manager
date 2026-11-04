@@ -1,4 +1,4 @@
-namespace SkyPort.Application.UseCases.Reservas.Dtos;
+namespace SkyPort.Application.Dtos.Reservas;
 
 public sealed record VueloAbiertoDto(
     int VueloId,
@@ -34,3 +34,5 @@ public sealed record AsientosVueloDto(
     int Capacidad,
     int Filas,
     IReadOnlyList<string> AsientosOcupados);
+
+public sealed record ReservaBoletoOptionDto(int ReservaId, string Codigo, string NombrePasajero, string NumeroVuelo, string Asiento);

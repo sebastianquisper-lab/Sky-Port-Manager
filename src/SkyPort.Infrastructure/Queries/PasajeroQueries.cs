@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SkyPort.Application.Common;
 using SkyPort.Application.Ports;
-using SkyPort.Application.UseCases.Pasajeros.Dtos;
+using SkyPort.Application.Dtos.Pasajeros;
 using SkyPort.Persistence.Context;
 
 namespace SkyPort.Infrastructure.Queries;

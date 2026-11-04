@@ -1,14 +1,37 @@
 using Microsoft.EntityFrameworkCore;
+using SkyPort.Application.Common;
 using SkyPort.Application.Common.Constants;
 using SkyPort.Application.Ports;
-using SkyPort.Application.UseCases.Reservas;
-using SkyPort.Application.UseCases.Reservas.Dtos;
+using SkyPort.Application.Rules;
+using SkyPort.Application.Dtos.Reservas;
 using SkyPort.Persistence.Context;
 
 namespace SkyPort.Infrastructure.Queries;
 
 public sealed class ReservaQueries(SkyPortContext context) : IReservaQueries
 {
+    public async Task<PagedResult<ReservaDto>> GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var query = GetReservasQuery();
+        var total = await query.CountAsync(cancellationToken);
+        var pages = (int)Math.Ceiling(total / (double)pageSize);
+        var page = pages == 0 ? 1 : Math.Min(pageNumber, pages);
+        var items = await query.OrderByDescending(x => x.FechaReserva).ThenByDescending(x => x.ReservaId)
+            .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        return new PagedResult<ReservaDto>(items, page, pageSize, total);
+    }
+
+    public Task<ReservaDto?> GetByIdAsync(int reservaId, CancellationToken cancellationToken = default) =>
+        GetReservasQuery().FirstOrDefaultAsync(x => x.ReservaId == reservaId, cancellationToken);
+
+    public async Task<IReadOnlyList<ReservaBoletoOptionDto>> GetReservasParaBoletoAsync(CancellationToken cancellationToken = default) =>
+        await context.Reserva.AsNoTracking()
+            .Where(r => r.Estado == EstadoReserva.Confirmada && r.Boleto == null)
+            .OrderBy(r => r.FechaReserva).ThenBy(r => r.ReservaId)
+            .Select(r => new ReservaBoletoOptionDto(r.ReservaId, r.Codigo,
+                r.Pasajero.Nombres + " " + r.Pasajero.Apellidos, r.Vuelo.NumeroVuelo, r.Asiento))
+            .ToListAsync(cancellationToken);
+
     public async Task<IReadOnlyList<VueloAbiertoDto>> GetVuelosAbiertosAsync(
         CancellationToken cancellationToken = default)
     {

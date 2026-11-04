@@ -1,4 +1,4 @@
-@model IReadOnlyList<SkyPort.Application.UseCases.Reservas.Dtos.VueloAbiertoDto>
+@model IReadOnlyList<SkyPort.Application.Dtos.Reservas.VueloAbiertoDto>
 @using SkyPort.Application.Common.Constants
 @{
     ViewData["Title"] = "Reservas";
@@ -6,7 +6,7 @@
 }
 
 <div class="mb-4">
-    <h1 class="h2 mb-1">Reservas</h1>
+    <div class="d-flex justify-content-between align-items-center"><h1 class="h2 mb-1">Reservas</h1><a asp-action="Listado" class="btn btn-outline-primary">Todas las reservas</a></div>
     <p class="text-secondary mb-0">Elige un vuelo con asientos disponibles para consultar o crear reservas.</p>
 </div>
 
