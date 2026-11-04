@@ -1,0 +1,23 @@
+@model SkyPort.Web.Models.PuertaViewModel
+@{ ViewData["Title"] = "Crear puerta"; }
+<h1>Crear puerta</h1>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="TerminalId" class="form-label">Terminal</label>
+        <select asp-for="TerminalId" asp-items="Model.Terminales" class="form-select"><option value="">Seleccione una terminal</option></select>
+        <span asp-validation-for="TerminalId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Codigo" class="form-label"></label>
+        <input asp-for="Codigo" class="form-control" maxlength="10" />
+        <span asp-validation-for="Codigo" class="text-danger"></span>
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="Disponible" class="form-check-input" />
+        <label asp-for="Disponible" class="form-check-label">Disponible</label>
+        <span asp-validation-for="Disponible" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,24 @@
+@model IReadOnlyList<SkyPort.Application.Dtos.Puertas.PuertaDto>
+@{ ViewData["Title"] = "Puertas"; }
+<h1>Puertas</h1>
+<a asp-action="Create" class="btn btn-primary">Registrar puerta</a>
+@if (Model.Count == 0)
+{
+    <p>No hay puertas registradas.</p>
+}
+else
+{
+    <table class="table">
+        <thead><tr><th>Terminal</th><th>Código</th><th>Disponible</th></tr></thead>
+        <tbody>
+        @foreach (var puerta in Model)
+        {
+            <tr>
+                <td>@puerta.TerminalNombre (Id @puerta.TerminalId)</td>
+                <td><a asp-action="Details" asp-route-id="@puerta.PuertaId">@puerta.Codigo</a></td>
+                <td>@(puerta.Disponible is true ? "Sí" : puerta.Disponible is false ? "No" : "Sin dato")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

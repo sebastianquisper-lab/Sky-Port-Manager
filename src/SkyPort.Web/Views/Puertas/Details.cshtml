@@ -1,0 +1,12 @@
+@model SkyPort.Application.Dtos.Puertas.PuertaDto
+@{ ViewData["Title"] = "Detalle de puerta"; }
+<h1>Puerta @Model.Codigo</h1>
+<a asp-action="Edit" asp-route-id="@Model.PuertaId">Editar</a>
+<a asp-action="Delete" asp-route-id="@Model.PuertaId">Eliminar</a>
+<dl>
+    <dt>Id</dt><dd>@Model.PuertaId</dd>
+    <dt>Terminal</dt><dd>@Model.TerminalNombre (Id @Model.TerminalId)</dd>
+    <dt>Código</dt><dd>@Model.Codigo</dd>
+    <dt>Disponible</dt><dd>@(Model.Disponible is true ? "Sí" : Model.Disponible is false ? "No" : "Sin dato")</dd>
+</dl>
+<a asp-action="Index">Volver a puertas</a>

@@ -1,0 +1,9 @@
+@model SkyPort.Application.Dtos.Puertas.PuertaDto
+@{ ViewData["Title"] = "Eliminar puerta"; }
+<h1>Eliminar puerta</h1>
+<p>Confirma la eliminación de la puerta @Model.Codigo de @Model.TerminalNombre. No se puede eliminar si tiene vuelos o embarques asociados.</p>
+<form asp-action="Delete" asp-route-id="@Model.PuertaId" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Details" asp-route-id="@Model.PuertaId" class="btn btn-secondary">Cancelar</a>
+</form>
