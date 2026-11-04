@@ -13,9 +13,9 @@ public sealed class BoletosController(IMediator mediator) : Controller
 {
     [HttpGet]
     [Authorize(Policy = Policies.GestionPasajeros)]
-    public async Task<IActionResult> Create(CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(int? reservaId, CancellationToken cancellationToken)
     {
-        var model = new BoletoViewModel();
+        var model = new BoletoViewModel { ReservaId = reservaId.GetValueOrDefault() };
         await PopulateReservationsAsync(model, cancellationToken);
         return View(model);
     }
