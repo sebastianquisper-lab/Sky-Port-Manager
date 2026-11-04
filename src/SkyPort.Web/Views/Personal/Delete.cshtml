@@ -1,0 +1,9 @@
+@model SkyPort.Application.Dtos.Empleados.EmpleadoDto
+@{ ViewData["Title"] = "Eliminar empleado"; }
+<h1>Eliminar empleado</h1>
+<p>Confirma la eliminación de @Model.Nombres @Model.Apellidos. No se puede eliminar si tiene check-in o asignaciones de tripulación asociadas; puedes inactivarlo para conservar su historial.</p>
+<form asp-action="Delete" asp-route-id="@Model.EmpleadoId" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Details" asp-route-id="@Model.EmpleadoId" class="btn btn-secondary">Cancelar</a>
+</form>

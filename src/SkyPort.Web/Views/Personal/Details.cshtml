@@ -1,0 +1,15 @@
+@model SkyPort.Application.Dtos.Empleados.EmpleadoDto
+@{ ViewData["Title"] = "Detalle de empleado"; }
+<h1>@Model.Nombres @Model.Apellidos</h1>
+<a asp-action="Edit" asp-route-id="@Model.EmpleadoId">Editar</a>
+<a asp-action="Delete" asp-route-id="@Model.EmpleadoId">Eliminar</a>
+<dl>
+    <dt>Id</dt><dd>@Model.EmpleadoId</dd>
+    <dt>Documento</dt><dd>@Model.NumeroDocumento</dd>
+    <dt>Nombres</dt><dd>@Model.Nombres</dd>
+    <dt>Apellidos</dt><dd>@Model.Apellidos</dd>
+    <dt>Cargo</dt><dd>@Model.Cargo</dd>
+    <dt>Correo</dt><dd>@(string.IsNullOrWhiteSpace(Model.Email) ? "No indicado" : Model.Email)</dd>
+    <dt>Activo</dt><dd>@(Model.Activo is true ? "Sí" : Model.Activo is false ? "No" : "Sin dato")</dd>
+</dl>
+<a asp-action="Index">Volver a personal</a>

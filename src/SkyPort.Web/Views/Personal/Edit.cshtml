@@ -1,0 +1,20 @@
+@model SkyPort.Web.Models.EmpleadoViewModel
+@{ ViewData["Title"] = "Editar empleado"; }
+<h1>Editar empleado</h1>
+<form asp-action="Edit" asp-route-id="@Model.EmpleadoId" method="post">
+    <input asp-for="EmpleadoId" type="hidden" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="NumeroDocumento" class="form-label"></label><input asp-for="NumeroDocumento" class="form-control" maxlength="20" /><span asp-validation-for="NumeroDocumento" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Nombres" class="form-label"></label><input asp-for="Nombres" class="form-control" maxlength="80" /><span asp-validation-for="Nombres" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Apellidos" class="form-label"></label><input asp-for="Apellidos" class="form-control" maxlength="80" /><span asp-validation-for="Apellidos" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Cargo" class="form-label"></label><select asp-for="Cargo" asp-items="Model.Cargos" class="form-select"><option value="">Seleccione un cargo</option></select><span asp-validation-for="Cargo" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" maxlength="120" /><span asp-validation-for="Email" class="text-danger"></span></div>
+    <fieldset class="mb-3">
+        <legend>Actividad</legend>
+        <div class="form-check form-check-inline"><input name="Activo" id="ActivoTrue" type="radio" value="true" checked="@(Model.Activo is true)" class="form-check-input" /><label class="form-check-label" for="ActivoTrue">Activo</label></div>
+        <div class="form-check form-check-inline"><input name="Activo" id="ActivoFalse" type="radio" value="false" checked="@(Model.Activo is false)" class="form-check-input" /><label class="form-check-label" for="ActivoFalse">Inactivo</label></div>
+        <span asp-validation-for="Activo" class="text-danger"></span>
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a asp-action="Details" asp-route-id="@Model.EmpleadoId" class="btn btn-secondary">Cancelar</a>
+</form>
