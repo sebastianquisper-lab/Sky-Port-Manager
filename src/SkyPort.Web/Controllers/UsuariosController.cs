@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkyPort.Application.Common.Constants;
+using SkyPort.Application.UseCases.Usuarios.Commands;
 using SkyPort.Application.UseCases.Usuarios.Queries;
 
 namespace SkyPort.Web.Controllers;
@@ -29,5 +30,32 @@ public sealed class UsuariosController(IMediator mediator) : Controller
         }
 
         return View(result.Value);
+    }
+
+    [HttpGet]
+    public IActionResult Create() => View(new Models.CrearUsuarioViewModel());
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Models.CrearUsuarioViewModel model, CancellationToken cancellationToken)
+    {
+        if (!ModelState.IsValid)
+        {
+            model.Password = string.Empty;
+            model.ConfirmPassword = string.Empty;
+            return View(model);
+        }
+
+        var result = await mediator.Send(new CreateUsuarioCommand(model.Email, model.Password), cancellationToken);
+        model.Password = string.Empty;
+        model.ConfirmPassword = string.Empty;
+        if (!result.IsSuccess || result.Value is null)
+        {
+            ModelState.AddModelError(string.Empty, result.Error?.Message ?? "No se pudo crear el usuario.");
+            return View(model);
+        }
+
+        TempData["Success"] = "El usuario se creó correctamente.";
+        return RedirectToAction(nameof(Details), new { id = result.Value.Id });
     }
 }

@@ -8,4 +8,6 @@ public interface IUsuarioIdentityService
     Task<PagedResult<UsuarioDto>> GetPageAsync(int page, int pageSize, CancellationToken cancellationToken);
 
     Task<UsuarioDetalleDto?> GetByIdAsync(string id, CancellationToken cancellationToken);
+
+    Task<Result<UsuarioDetalleDto>> CreateAsync(string email, string password, CancellationToken cancellationToken);
 }

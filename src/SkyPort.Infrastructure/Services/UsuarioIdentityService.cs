@@ -39,4 +39,32 @@ public sealed class UsuarioIdentityService(UserManager<ApplicationUser> userMana
         var roles = await userManager.GetRolesAsync(user);
         return new UsuarioDetalleDto(user.Id, user.Email, user.UserName, user.EmailConfirmed, roles.Order(StringComparer.Ordinal).ToArray());
     }
+
+    public async Task<Result<UsuarioDetalleDto>> CreateAsync(
+        string email,
+        string password,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        var user = new ApplicationUser { Email = email, UserName = email };
+        var result = await userManager.CreateAsync(user, password);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (!result.Succeeded)
+        {
+            var codes = result.Errors.Select(error => error.Code).ToHashSet(StringComparer.Ordinal);
+            if (codes.Contains("DuplicateEmail") || codes.Contains("DuplicateUserName"))
+            {
+                return Result<UsuarioDetalleDto>.Failure(Error.Conflict("Ya existe una cuenta con ese correo."));
+            }
+
+            if (codes.Any(code => code.StartsWith("Password", StringComparison.Ordinal)))
+            {
+                return Result<UsuarioDetalleDto>.Failure(Error.Validation("La contraseña no cumple los requisitos configurados."));
+            }
+
+            return Result<UsuarioDetalleDto>.Failure(Error.Validation("Identity rechazó los datos de la cuenta."));
+        }
+
+        return Result<UsuarioDetalleDto>.Success(new UsuarioDetalleDto(user.Id, user.Email, user.UserName, user.EmailConfirmed, Array.Empty<string>()));
+    }
 }
