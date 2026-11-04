@@ -26,4 +26,17 @@ public sealed class UsuarioIdentityService(UserManager<ApplicationUser> userMana
 
         return new PagedResult<UsuarioDto>(items, page, pageSize, totalCount);
     }
+
+    public async Task<UsuarioDetalleDto?> GetByIdAsync(string id, CancellationToken cancellationToken)
+    {
+        var user = await userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            return null;
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        var roles = await userManager.GetRolesAsync(user);
+        return new UsuarioDetalleDto(user.Id, user.Email, user.UserName, user.EmailConfirmed, roles.Order(StringComparer.Ordinal).ToArray());
+    }
 }

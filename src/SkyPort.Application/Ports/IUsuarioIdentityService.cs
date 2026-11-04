@@ -6,4 +6,6 @@ namespace SkyPort.Application.Ports;
 public interface IUsuarioIdentityService
 {
     Task<PagedResult<UsuarioDto>> GetPageAsync(int page, int pageSize, CancellationToken cancellationToken);
+
+    Task<UsuarioDetalleDto?> GetByIdAsync(string id, CancellationToken cancellationToken);
 }

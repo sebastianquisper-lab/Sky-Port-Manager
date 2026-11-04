@@ -13,11 +13,11 @@
 <div class="card shadow-sm">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
-            <thead><tr><th>Correo</th><th>Nombre de usuario</th><th>Correo confirmado</th></tr></thead>
+            <thead><tr><th>Correo</th><th>Nombre de usuario</th><th>Correo confirmado</th><th></th></tr></thead>
             <tbody>
             @if (Model.Items.Count == 0)
             {
-                <tr><td colspan="3" class="text-center text-secondary py-4">No hay usuarios registrados.</td></tr>
+                <tr><td colspan="4" class="text-center text-secondary py-4">No hay usuarios registrados.</td></tr>
             }
             else
             {
@@ -27,6 +27,7 @@
                         <td>@(usuario.Email ?? "—")</td>
                         <td>@(usuario.UserName ?? "—")</td>
                         <td>@(usuario.EmailConfirmado ? "Sí" : "No")</td>
+                        <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@usuario.Id">Ver</a></td>
                     </tr>
                 }
             }

@@ -1,0 +1,15 @@
+@model SkyPort.Application.Dtos.Usuarios.UsuarioDetalleDto
+@{
+    ViewData["Title"] = "Detalle de usuario";
+}
+
+<h1 class="h2 mb-4">Detalle de usuario</h1>
+<div class="card shadow-sm"><div class="card-body">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Correo</dt><dd class="col-sm-9">@(Model.Email ?? "—")</dd>
+        <dt class="col-sm-3">Nombre de usuario</dt><dd class="col-sm-9">@(Model.UserName ?? "—")</dd>
+        <dt class="col-sm-3">Correo confirmado</dt><dd class="col-sm-9">@(Model.EmailConfirmado ? "Sí" : "No")</dd>
+        <dt class="col-sm-3">Roles</dt><dd class="col-sm-9">@(Model.Roles.Count == 0 ? "Sin roles" : string.Join(", ", Model.Roles))</dd>
+    </dl>
+</div></div>
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">Volver a usuarios</a>

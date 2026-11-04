@@ -18,4 +18,16 @@ public sealed class UsuariosController(IMediator mediator) : Controller
         ViewData["Total"] = usuarios.TotalCount;
         return View(usuarios);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Details(string id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetUsuarioByIdQuery(id), cancellationToken);
+        if (!result.IsSuccess || result.Value is null)
+        {
+            return NotFound();
+        }
+
+        return View(result.Value);
+    }
 }
