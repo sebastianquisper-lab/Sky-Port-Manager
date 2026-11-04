@@ -4,16 +4,6 @@ using SkyPort.Application.Dtos.Pasajeros;
 
 namespace SkyPort.Application.UseCases.Pasajeros;
 
-public sealed record CreatePasajeroCommand(
-    string TipoDocumento,
-    string NumeroDocumento,
-    string Nombres,
-    string Apellidos,
-    DateOnly FechaNacimiento,
-    string Nacionalidad,
-    string? Email,
-    string? Telefono) : IRequest<Result<PasajeroDto>>;
-
 public sealed record UpdatePasajeroCommand(
     int PasajeroId,
     string TipoDocumento,
