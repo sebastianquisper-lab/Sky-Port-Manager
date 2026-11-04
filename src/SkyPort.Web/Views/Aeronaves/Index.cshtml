@@ -1,0 +1,13 @@
+@model IReadOnlyList<SkyPort.Application.Dtos.Aeronaves.AeronaveDto>
+@{ ViewData["Title"] = "Aeronaves"; }
+<h1>Aeronaves</h1>
+@if (Model.Count == 0) { <p>No hay aeronaves registradas.</p> }
+<table class="table">
+<thead><tr><th>AeronaveId</th><th>AerolineaId</th><th>Matricula</th><th>Modelo</th><th>Capacidad</th><th>Estado</th></tr></thead>
+<tbody>
+@foreach (var row in Model)
+{
+<tr><td>@row.AeronaveId</td><td>@row.AerolineaId</td><td>@row.Matricula</td><td>@row.Modelo</td><td>@row.Capacidad</td><td>@row.Estado</td></tr>
+}
+</tbody>
+</table>
