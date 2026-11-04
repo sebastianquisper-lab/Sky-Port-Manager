@@ -1,0 +1,19 @@
+@model SkyPort.Application.Dtos.Vuelos.VueloDetailDto
+@{
+    ViewData["Title"] = "Detalle de vuelo";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div><h1 class="h2 mb-1">Vuelo @Model.NumeroVuelo</h1><p class="text-secondary mb-0">Detalle de ruta y programación.</p></div>
+</div>
+<div class="card shadow-sm"><div class="card-body">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Ruta</dt><dd class="col-sm-9">@Model.CodigoOrigen · @Model.CiudadOrigen → @Model.CodigoDestino · @Model.CiudadDestino</dd>
+        <dt class="col-sm-3">Aeronave</dt><dd class="col-sm-9">@Model.MatriculaAeronave · @Model.ModeloAeronave</dd>
+        <dt class="col-sm-3">Puerta</dt><dd class="col-sm-9">@(Model.CodigoPuerta ?? "Sin asignar")</dd>
+        <dt class="col-sm-3">Salida</dt><dd class="col-sm-9">@Model.FechaSalida.ToString("yyyy-MM-dd HH:mm")</dd>
+        <dt class="col-sm-3">Llegada</dt><dd class="col-sm-9">@Model.FechaLlegada.ToString("yyyy-MM-dd HH:mm")</dd>
+        <dt class="col-sm-3">Estado</dt><dd class="col-sm-9">@Model.Estado</dd>
+    </dl>
+</div></div>
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">Volver a vuelos</a>

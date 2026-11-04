@@ -6,11 +6,11 @@
 <div class="mb-4"><h1 class="h2 mb-1">Vuelos</h1><p class="text-secondary mb-0">Consulta vuelos, rutas, aeronaves y horarios.</p></div>
 <div class="card shadow-sm"><div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
-        <thead><tr><th>Vuelo</th><th>Ruta</th><th>Aeronave</th><th>Puerta</th><th>Salida</th><th>Llegada</th><th>Estado</th></tr></thead>
+        <thead><tr><th>Vuelo</th><th>Ruta</th><th>Aeronave</th><th>Puerta</th><th>Salida</th><th>Llegada</th><th>Estado</th><th></th></tr></thead>
         <tbody>
         @if (Model.Count == 0)
         {
-            <tr><td colspan="7" class="text-center text-secondary py-4">No hay vuelos registrados.</td></tr>
+            <tr><td colspan="8" class="text-center text-secondary py-4">No hay vuelos registrados.</td></tr>
         }
         else
         {
@@ -21,6 +21,7 @@
                     <td>@(flight.Puerta ?? "Sin asignar")</td>
                     <td>@flight.FechaSalida.ToString("yyyy-MM-dd HH:mm")</td><td>@flight.FechaLlegada.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>@flight.Estado</td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@flight.VueloId">Ver</a></td>
                 </tr>
             }
         }
