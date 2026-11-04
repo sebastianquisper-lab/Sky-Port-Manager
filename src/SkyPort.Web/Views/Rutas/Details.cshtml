@@ -14,3 +14,7 @@
     </dl>
 </div></div>
 <a class="btn btn-outline-secondary mt-3" asp-action="Index">Volver a rutas</a>
+@if (User.IsInRole(SkyPort.Application.Common.Constants.Roles.Administrador) || User.IsInRole(SkyPort.Application.Common.Constants.Roles.OperadorVuelos))
+{
+    <a class="btn btn-outline-primary mt-3" asp-action="Edit" asp-route-id="@Model.RutaId">Editar duración</a>
+}

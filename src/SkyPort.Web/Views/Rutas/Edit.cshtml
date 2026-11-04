@@ -1,0 +1,20 @@
+@model SkyPort.Web.Models.EditRutaViewModel
+@{
+    ViewData["Title"] = "Editar duración de ruta";
+}
+
+<h1 class="h2 mb-2">Editar duración de ruta</h1>
+<p class="text-secondary mb-4">Los extremos de la ruta se conservan para proteger vuelos existentes.</p>
+<div class="card shadow-sm"><div class="card-body">
+    <form asp-action="Edit" asp-route-id="@Model.RutaId" method="post">
+        <input asp-for="RutaId" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Origen</label><input class="form-control" value="@Model.CodigoOrigen · @Model.CiudadOrigen" readonly /></div>
+            <div class="col-md-6"><label class="form-label">Destino</label><input class="form-control" value="@Model.CodigoDestino · @Model.CiudadDestino" readonly /></div>
+            <div class="col-md-6"><label asp-for="DuracionMinutos" class="form-label"></label><input asp-for="DuracionMinutos" class="form-control" min="1" /><span asp-validation-for="DuracionMinutos" class="text-danger"></span></div>
+        </div>
+        <div class="mt-4"><button type="submit" class="btn btn-primary">Guardar duración</button><a asp-action="Details" asp-route-id="@Model.RutaId" class="btn btn-outline-secondary">Cancelar</a></div>
+    </form>
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
