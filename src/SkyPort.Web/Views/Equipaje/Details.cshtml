@@ -1,0 +1,11 @@
+@model SkyPort.Application.Dtos.Equipajes.EquipajeDto
+@{ ViewData["Title"] = "Detalle de equipaje"; }
+<h1>Equipaje @Model.Codigo</h1>
+<dl>
+    <dt>Id</dt><dd>@Model.EquipajeId</dd>
+    <dt>Boleto</dt><dd>@Model.CodigoBoleto (Id @Model.BoletoId)</dd>
+    <dt>Código</dt><dd>@Model.Codigo</dd>
+    <dt>Peso</dt><dd>@Model.PesoKg.ToString("0.00") kg</dd>
+    <dt>Estado</dt><dd>@Model.Estado</dd>
+</dl>
+<a asp-action="Index">Volver a equipajes</a>
