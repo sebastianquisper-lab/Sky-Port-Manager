@@ -34,6 +34,14 @@ public sealed class ReservasController(IMediator mediator) : Controller
         return View(reservas);
     }
 
+    [HttpGet]
+    [Authorize(Policy = Policies.TodosLosRoles)]
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetReservaByIdQuery(id), cancellationToken);
+        return !result.IsSuccess || result.Value is null ? NotFound() : View(result.Value);
+    }
+
     [HttpGet("/Reservas/Vuelo/{vueloId:int}")]
     [Authorize(Policy = Policies.TodosLosRoles)]
     public async Task<IActionResult> Vuelo(int vueloId, CancellationToken cancellationToken)

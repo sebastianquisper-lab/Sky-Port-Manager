@@ -11,7 +11,7 @@
     @if (Model.Items.Count == 0) { <tr><td colspan="6" class="text-center text-secondary py-4">No hay reservas registradas.</td></tr> }
     @foreach (var reserva in Model.Items)
     {
-        <tr><td>@reserva.Codigo</td><td>@reserva.NombrePasajero<br /><small class="text-secondary">@reserva.TipoDocumento @reserva.NumeroDocumento</small></td><td>@reserva.NumeroVuelo<br /><small class="text-secondary">@reserva.Ruta</small></td><td>@reserva.Asiento</td><td>@reserva.FechaReserva.ToString("dd/MM/yyyy HH:mm")</td><td>@reserva.Estado</td></tr>
+        <tr><td><a asp-action="Details" asp-route-id="@reserva.ReservaId">@reserva.Codigo</a></td><td>@reserva.NombrePasajero<br /><small class="text-secondary">@reserva.TipoDocumento @reserva.NumeroDocumento</small></td><td>@reserva.NumeroVuelo<br /><small class="text-secondary">@reserva.Ruta</small></td><td>@reserva.Asiento</td><td>@reserva.FechaReserva.ToString("dd/MM/yyyy HH:mm")</td><td>@reserva.Estado</td></tr>
     }
     </tbody>
 </table></div>

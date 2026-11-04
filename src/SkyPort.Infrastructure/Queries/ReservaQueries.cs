@@ -21,6 +21,9 @@ public sealed class ReservaQueries(SkyPortContext context) : IReservaQueries
         return new PagedResult<ReservaDto>(items, page, pageSize, total);
     }
 
+    public Task<ReservaDto?> GetByIdAsync(int reservaId, CancellationToken cancellationToken = default) =>
+        GetReservasQuery().FirstOrDefaultAsync(x => x.ReservaId == reservaId, cancellationToken);
+
     public async Task<IReadOnlyList<VueloAbiertoDto>> GetVuelosAbiertosAsync(
         CancellationToken cancellationToken = default)
     {

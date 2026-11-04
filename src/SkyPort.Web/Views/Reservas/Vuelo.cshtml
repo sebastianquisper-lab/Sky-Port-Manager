@@ -37,7 +37,7 @@
                     @foreach (var reserva in Model)
                     {
                         <tr>
-                            <th scope="row">@reserva.Codigo</th>
+                            <th scope="row"><a asp-action="Details" asp-route-id="@reserva.ReservaId">@reserva.Codigo</a></th>
                             <td>@reserva.NombrePasajero</td>
                             <td>@reserva.TipoDocumento @reserva.NumeroDocumento</td>
                             <td>@reserva.Asiento</td>
