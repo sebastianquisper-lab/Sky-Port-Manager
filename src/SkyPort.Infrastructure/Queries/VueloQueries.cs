@@ -73,4 +73,16 @@ public sealed class VueloQueries(SkyPortContext context) : IVueloQueries
 
         return new VueloLookupsDto(routes, aircraft, gates);
     }
+
+    public async Task<bool> HasReservationsOrCrewAsync(int vueloId, CancellationToken cancellationToken)
+    {
+        if (await context.Reserva.AsNoTracking().AnyAsync(reservation => reservation.VueloId == vueloId, cancellationToken))
+        {
+            return true;
+        }
+
+        return await context.Tripulacionvuelo
+            .AsNoTracking()
+            .AnyAsync(assignment => assignment.VueloId == vueloId, cancellationToken);
+    }
 }

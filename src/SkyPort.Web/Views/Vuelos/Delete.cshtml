@@ -1,0 +1,14 @@
+@model SkyPort.Application.Dtos.Vuelos.VueloDetailDto
+@{
+    ViewData["Title"] = "Eliminar vuelo";
+}
+
+<h1 class="h2 mb-4">Eliminar vuelo</h1>
+<div class="card border-danger shadow-sm"><div class="card-body">
+    <p>¿Confirmas que quieres eliminar el vuelo <strong>@Model.NumeroVuelo</strong> de @Model.CodigoOrigen a @Model.CodigoDestino?</p>
+    <p class="text-secondary">Solo se puede eliminar si no tiene reservas ni tripulación asociada.</p>
+    <form asp-action="Delete" asp-route-id="@Model.VueloId" method="post">
+        <button type="submit" class="btn btn-danger">Eliminar vuelo</button>
+        <a asp-action="Details" asp-route-id="@Model.VueloId" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div></div>

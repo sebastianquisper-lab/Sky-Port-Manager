@@ -26,7 +26,10 @@
                     <td>@(flight.Puerta ?? "Sin asignar")</td>
                     <td>@flight.FechaSalida.ToString("yyyy-MM-dd HH:mm")</td><td>@flight.FechaLlegada.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>@flight.Estado</td>
-                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@flight.VueloId">Ver</a></td>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@flight.VueloId">Ver</a>
+                        @if (puedeGestionar) { <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@flight.VueloId">Eliminar</a> }
+                    </td>
                 </tr>
             }
         }

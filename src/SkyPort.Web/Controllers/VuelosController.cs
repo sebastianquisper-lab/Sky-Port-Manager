@@ -70,6 +70,40 @@ public sealed class VuelosController(IMediator mediator) : Controller
         return RedirectToAction(nameof(Details), new { id = result.Value });
     }
 
+    [HttpGet]
+    [Authorize(Policy = Policies.GestionOperaciones)]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetVueloByIdQuery(id), cancellationToken);
+        if (!result.IsSuccess || result.Value is null)
+        {
+            return NotFound();
+        }
+
+        return View(result.Value);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    [Authorize(Policy = Policies.GestionOperaciones)]
+    public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new DeleteVueloCommand(id), cancellationToken);
+        if (!result.IsSuccess)
+        {
+            if (result.Error?.Type == SkyPort.Application.Common.ErrorType.NotFound)
+            {
+                return NotFound();
+            }
+
+            TempData["Error"] = result.Error?.Message ?? "No se pudo eliminar el vuelo.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        TempData["Success"] = "El vuelo se eliminó correctamente.";
+        return RedirectToAction(nameof(Index));
+    }
+
     private async Task PopulateCreateOptionsAsync(VueloCreateViewModel model, CancellationToken cancellationToken)
     {
         var options = await mediator.Send(new GetVueloCreateOptionsQuery(), cancellationToken);
