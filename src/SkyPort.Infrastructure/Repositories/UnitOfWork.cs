@@ -53,6 +53,9 @@ public sealed class UnitOfWork : IUnitOfWork
         }
         catch (DbUpdateException exception)
         {
+            if (exception.InnerException is MySqlException { Number: 1451 or 1452 })
+                throw new ReferenceConflictException(exception);
+
             if (exception.InnerException is MySqlException
                 {
                     ErrorCode: MySqlErrorCode.DuplicateKeyEntry
