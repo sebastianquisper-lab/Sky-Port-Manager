@@ -1,0 +1,41 @@
+@model SkyPort.Application.Common.PagedResult<SkyPort.Application.Dtos.Usuarios.UsuarioDto>
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-1">Usuarios</h1>
+        <p class="text-secondary mb-0">Administración de cuentas de acceso.</p>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead><tr><th>Correo</th><th>Nombre de usuario</th><th>Correo confirmado</th></tr></thead>
+            <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr><td colspan="3" class="text-center text-secondary py-4">No hay usuarios registrados.</td></tr>
+            }
+            else
+            {
+                @foreach (var usuario in Model.Items)
+                {
+                    <tr>
+                        <td>@(usuario.Email ?? "—")</td>
+                        <td>@(usuario.UserName ?? "—")</td>
+                        <td>@(usuario.EmailConfirmado ? "Sí" : "No")</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <span class="small text-secondary">@Model.TotalCount usuarios · página @Model.PageNumber de @Model.TotalPages</span>
+    <partial name="_Pagination" />
+</div>
