@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SkyPort.Application.Common;
 using SkyPort.Application.Common.Constants;
 using SkyPort.Application.Ports;
 using SkyPort.Application.UseCases.Reservas;
@@ -9,6 +10,17 @@ namespace SkyPort.Infrastructure.Queries;
 
 public sealed class ReservaQueries(SkyPortContext context) : IReservaQueries
 {
+    public async Task<PagedResult<ReservaDto>> GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var query = GetReservasQuery();
+        var total = await query.CountAsync(cancellationToken);
+        var pages = (int)Math.Ceiling(total / (double)pageSize);
+        var page = pages == 0 ? 1 : Math.Min(pageNumber, pages);
+        var items = await query.OrderByDescending(x => x.FechaReserva).ThenByDescending(x => x.ReservaId)
+            .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        return new PagedResult<ReservaDto>(items, page, pageSize, total);
+    }
+
     public async Task<IReadOnlyList<VueloAbiertoDto>> GetVuelosAbiertosAsync(
         CancellationToken cancellationToken = default)
     {

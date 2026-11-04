@@ -7,6 +7,7 @@ using SkyPort.Application.UseCases.Pasajeros;
 using SkyPort.Application.UseCases.Pasajeros.Queries;
 using SkyPort.Application.UseCases.Reservas;
 using SkyPort.Application.UseCases.Reservas.Dtos;
+using SkyPort.Application.UseCases.Reservas.Queries;
 using SkyPort.Web.Models;
 
 namespace SkyPort.Web.Controllers;
@@ -19,6 +20,18 @@ public sealed class ReservasController(IMediator mediator) : Controller
     {
         var vuelos = await mediator.Send(new GetVuelosAbiertosQuery(), cancellationToken);
         return View(vuelos.Where(vuelo => vuelo.AsientosLibres > 0).ToList());
+    }
+
+    [HttpGet]
+    [Authorize(Policy = Policies.TodosLosRoles)]
+    public async Task<IActionResult> Listado(int page = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        var reservas = await mediator.Send(new GetReservasQuery(page, pageSize), cancellationToken);
+        ViewData["Page"] = reservas.PageNumber;
+        ViewData["PageSize"] = reservas.PageSize;
+        ViewData["Total"] = reservas.TotalCount;
+        ViewData["RouteValues"] = new Dictionary<string, string>();
+        return View(reservas);
     }
 
     [HttpGet("/Reservas/Vuelo/{vueloId:int}")]
