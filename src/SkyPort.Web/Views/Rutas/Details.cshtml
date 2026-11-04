@@ -1,0 +1,16 @@
+@model SkyPort.Application.Dtos.Rutas.RutaDto
+@{
+    ViewData["Title"] = "Detalle de ruta";
+}
+
+<h1 class="h2 mb-4">Detalle de ruta</h1>
+<div class="card shadow-sm"><div class="card-body">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Código de origen</dt><dd class="col-sm-9">@Model.CodigoOrigen</dd>
+        <dt class="col-sm-3">Ciudad de origen</dt><dd class="col-sm-9">@Model.CiudadOrigen</dd>
+        <dt class="col-sm-3">Código de destino</dt><dd class="col-sm-9">@Model.CodigoDestino</dd>
+        <dt class="col-sm-3">Ciudad de destino</dt><dd class="col-sm-9">@Model.CiudadDestino</dd>
+        <dt class="col-sm-3">Duración</dt><dd class="col-sm-9">@Model.DuracionMinutos minutos</dd>
+    </dl>
+</div></div>
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">Volver a rutas</a>

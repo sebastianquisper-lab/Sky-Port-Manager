@@ -15,4 +15,17 @@ public sealed class RutasController(IMediator mediator) : Controller
         var routes = await mediator.Send(new GetRutasQuery(), cancellationToken);
         return View(routes);
     }
+
+    [HttpGet]
+    [Authorize(Policy = Policies.TodosLosRoles)]
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetRutaByIdQuery(id), cancellationToken);
+        if (!result.IsSuccess || result.Value is null)
+        {
+            return NotFound();
+        }
+
+        return View(result.Value);
+    }
 }

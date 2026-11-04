@@ -7,11 +7,11 @@
 
 <div class="card shadow-sm"><div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
-        <thead><tr><th>Origen</th><th>Destino</th><th>Duración</th></tr></thead>
+        <thead><tr><th>Origen</th><th>Destino</th><th>Duración</th><th></th></tr></thead>
         <tbody>
         @if (Model.Count == 0)
         {
-            <tr><td colspan="3" class="text-center text-secondary py-4">No hay rutas registradas.</td></tr>
+            <tr><td colspan="4" class="text-center text-secondary py-4">No hay rutas registradas.</td></tr>
         }
         else
         {
@@ -21,6 +21,7 @@
                     <th scope="row">@route.CodigoOrigen · @route.CiudadOrigen</th>
                     <td>@route.CodigoDestino · @route.CiudadDestino</td>
                     <td>@route.DuracionMinutos min</td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@route.RutaId">Ver</a></td>
                 </tr>
             }
         }
