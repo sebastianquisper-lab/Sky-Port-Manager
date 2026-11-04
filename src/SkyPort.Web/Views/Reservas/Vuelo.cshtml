@@ -1,4 +1,4 @@
-@model IReadOnlyList<SkyPort.Application.UseCases.Reservas.Dtos.ReservaDto>
+@model IReadOnlyList<SkyPort.Application.Dtos.Reservas.ReservaDto>
 @using SkyPort.Application.Common.Constants
 @{
     ViewData["Title"] = Model.FirstOrDefault()?.NumeroVuelo is string numero ? $"Reservas {numero}" : "Reservas del vuelo";
@@ -37,7 +37,7 @@
                     @foreach (var reserva in Model)
                     {
                         <tr>
-                            <th scope="row">@reserva.Codigo</th>
+                            <th scope="row"><a asp-action="Details" asp-route-id="@reserva.ReservaId">@reserva.Codigo</a></th>
                             <td>@reserva.NombrePasajero</td>
                             <td>@reserva.TipoDocumento @reserva.NumeroDocumento</td>
                             <td>@reserva.Asiento</td>
@@ -47,10 +47,7 @@
                                 {
                                     @if (reserva.BoletoId is null)
                                     {
-                                        <form asp-controller="Boletos" asp-action="Emitir" method="post" class="d-inline">
-                                            <input type="hidden" name="reservaId" value="@reserva.ReservaId" />
-                                            <button type="submit" class="btn btn-sm btn-outline-primary">Emitir boleto</button>
-                                        </form>
+                                        <a class="btn btn-sm btn-outline-primary" asp-controller="Boletos" asp-action="Create" asp-route-reservaId="@reserva.ReservaId">Emitir boleto</a>
                                     }
                                     else
                                     {

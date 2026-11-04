@@ -1,0 +1,44 @@
+@model IReadOnlyList<SkyPort.Application.Dtos.Aerolineas.AerolineaDto>
+@{
+    ViewData["Title"] = "Aerolíneas";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Aerolíneas</h1>
+        <p class="text-secondary mb-0">Consulta las aerolíneas registradas en el sistema.</p>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">IATA</th>
+                    <th scope="col">País</th>
+                    <th scope="col">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr><td colspan="4" class="text-center text-secondary py-4">No hay aerolíneas registradas.</td></tr>
+                }
+                else
+                {
+                    @foreach (var aerolinea in Model)
+                    {
+                        <tr>
+                            <th scope="row">@aerolinea.Nombre</th>
+                            <td>@aerolinea.CodigoIata</td>
+                            <td>@aerolinea.Pais</td>
+                            <td>@(aerolinea.Activa ? "Activa" : "Inactiva")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+@model SkyPort.Application.Dtos.Reservas.ReservaDto
+@{ ViewData["Title"] = "Detalle de reserva"; }
+<div class="mb-4"><h1 class="h2">Reserva @Model.Codigo</h1><p class="text-secondary">Detalle de la reserva y sus referencias.</p></div>
+<dl class="row">
+    <dt class="col-sm-3">Pasajero</dt><dd class="col-sm-9">@Model.NombrePasajero (@Model.TipoDocumento @Model.NumeroDocumento)</dd>
+    <dt class="col-sm-3">Vuelo</dt><dd class="col-sm-9">@Model.NumeroVuelo · @Model.Ruta</dd>
+    <dt class="col-sm-3">Salida</dt><dd class="col-sm-9">@Model.FechaSalida.ToString("dd/MM/yyyy HH:mm")</dd>
+    <dt class="col-sm-3">Asiento</dt><dd class="col-sm-9">@Model.Asiento</dd>
+    <dt class="col-sm-3">Fecha de reserva</dt><dd class="col-sm-9">@Model.FechaReserva.ToString("dd/MM/yyyy HH:mm")</dd>
+    <dt class="col-sm-3">Estado</dt><dd class="col-sm-9">@Model.Estado</dd>
+    <dt class="col-sm-3">Boleto</dt><dd class="col-sm-9">@(Model.BoletoId is null ? "Sin boleto emitido" : $"#{Model.BoletoId} · {Model.EstadoBoleto}")</dd>
+</dl>
+<a asp-action="Listado" class="btn btn-outline-secondary">Volver al listado</a>

@@ -1,0 +1,14 @@
+@model SkyPort.Web.Models.CheckInViewModel
+@{ ViewData["Title"] = "Registrar check-in"; }
+<div class="mb-4"><h1 class="h2">Registrar check-in</h1><p class="text-secondary">El documento debe verificarse para completar el check-in y cambiar el estado del boleto.</p></div>
+<form asp-action="Create" method="post" class="card card-body">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <label asp-for="BoletoId" class="form-label">Boleto emitido</label>
+    <select asp-for="BoletoId" asp-items="Model.Boletos" class="form-select"><option value="0">Selecciona un boleto</option></select>
+    <span asp-validation-for="BoletoId" class="text-danger"></span>
+    <label asp-for="EmpleadoId" class="form-label mt-3">Empleado (opcional)</label>
+    <select asp-for="EmpleadoId" asp-items="Model.Empleados" class="form-select"><option value="">Sin asignar</option></select>
+    <div class="form-check mt-3"><input asp-for="DocumentoVerificado" class="form-check-input" /><label asp-for="DocumentoVerificado" class="form-check-label">Documento verificado</label></div>
+    <div class="d-flex gap-2 mt-4"><button type="submit" class="btn btn-primary">Registrar</button><a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

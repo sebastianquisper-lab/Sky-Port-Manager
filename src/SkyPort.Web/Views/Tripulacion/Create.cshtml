@@ -1,0 +1,11 @@
+@model TripulacionViewModel
+@{ ViewData["Title"] = "Asignar tripulacion"; }
+<h1>Asignar tripulacion</h1>
+<form asp-action="Create" method="post">
+<div asp-validation-summary="All" class="text-danger"></div>
+<label asp-for="VueloId">Vuelo</label><select asp-for="VueloId" asp-items="Model.Vuelos" class="form-select"><option value="">Seleccione</option></select>
+<label asp-for="EmpleadoId">Empleado</label><select asp-for="EmpleadoId" asp-items="Model.Empleados" class="form-select"><option value="">Seleccione</option></select>
+<label asp-for="RolAbordo">Rol a bordo</label><input asp-for="RolAbordo" class="form-control" />
+<button type="submit" class="btn btn-primary">Asignar</button><a asp-action="Index">Volver</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

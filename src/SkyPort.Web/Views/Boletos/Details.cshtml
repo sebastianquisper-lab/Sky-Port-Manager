@@ -1,0 +1,11 @@
+@model SkyPort.Application.Dtos.Boletos.BoletoDto
+@{ ViewData["Title"] = "Detalle de boleto"; }
+<div class="mb-4"><h1 class="h2">Boleto @Model.CodigoBoleto</h1><p class="text-secondary">Información del boleto y su reserva.</p></div>
+<dl class="row">
+    <dt class="col-sm-3">Reserva</dt><dd class="col-sm-9">@Model.CodigoReserva (#@Model.ReservaId)</dd>
+    <dt class="col-sm-3">Pasajero</dt><dd class="col-sm-9">@Model.NombrePasajero</dd>
+    <dt class="col-sm-3">Vuelo</dt><dd class="col-sm-9">@Model.NumeroVuelo · Asiento @Model.Asiento</dd>
+    <dt class="col-sm-3">Fecha de emisión</dt><dd class="col-sm-9">@Model.FechaEmision.ToString("dd/MM/yyyy HH:mm")</dd>
+    <dt class="col-sm-3">Estado</dt><dd class="col-sm-9">@Model.Estado</dd>
+</dl>
+<a asp-action="Index" class="btn btn-outline-secondary">Volver a boletos</a>

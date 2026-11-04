@@ -1,0 +1,19 @@
+@model AeronaveViewModel
+@using SkyPort.Application.Common.Constants
+@{ ViewData["Title"] = "Registrar aeronave"; }
+<h1>Registrar aeronave</h1>
+<form asp-action="Create" method="post">
+<div asp-validation-summary="All" class="text-danger"></div>
+<label asp-for="AerolineaId">Aerolinea</label><select asp-for="AerolineaId" asp-items="Model.Aerolineas" class="form-select"><option value="">Seleccione</option></select>
+<label asp-for="Matricula"></label><input asp-for="Matricula" class="form-control" />
+<label asp-for="Modelo"></label><input asp-for="Modelo" class="form-control" />
+<label asp-for="Capacidad"></label><input asp-for="Capacidad" class="form-control" />
+<label asp-for="Estado"></label><select asp-for="Estado" class="form-select">
+<option value="@EstadoAeronave.Operativa">Operativa</option>
+<option value="@EstadoAeronave.Mantenimiento">Mantenimiento</option>
+<option value="@EstadoAeronave.FueraDeServicio">Fuera de servicio</option>
+</select>
+<button class="btn btn-primary" type="submit">Guardar</button>
+<a asp-action="Index">Volver</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

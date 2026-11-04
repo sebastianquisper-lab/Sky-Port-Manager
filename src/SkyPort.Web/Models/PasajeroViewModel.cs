@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using SkyPort.Application.UseCases.Pasajeros.Dtos;
+using SkyPort.Application.Dtos.Pasajeros;
 
 namespace SkyPort.Web.Models;
 

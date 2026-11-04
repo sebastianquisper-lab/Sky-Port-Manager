@@ -67,17 +67,25 @@ Este flujo es la arquitectura acordada, no una afirmación de que todos sus comp
 
 ## Persistencia y generación de entidades
 
-El proyecto sigue el enfoque **base de datos primero**. Los scripts SQL son la fuente del esquema; EF Core no administra ese esquema con migraciones Code First. `database/01_schema.sql` crea las tablas operativas, `database/02_identity.sql` instala las tablas de Identity y `database/03_seed.sql` agrega datos ficticios de prueba.
+El proyecto sigue el enfoque **base de datos primero**. Los scripts SQL son la fuente del esquema; EF Core no administra ese esquema con migraciones Code First. Tres procedimientos distintos:
 
-Después de ejecutar los tres scripts en la base local `skyport_db` y configurar `ConnectionStrings:DefaultConnection` en user-secrets, se puede correr desde la raíz del repositorio:
+1. **Instalación de base local nueva:** ejecutar `database/01_schema.sql`, luego `02_identity.sql` y `03_seed.sql` sobre una instancia vacía (ver [database/README.md](../database/README.md)).
+2. **Actualización del esquema:** editar los scripts SQL y alinear la base local con esos cambios. El repositorio no propone un único mecanismo de reset para bases existentes; cada entorno aplica el cambio de forma controlada. Ajustar también el [ERD](ERD.md) si corresponde.
+3. **Scaffolding de entidades:** regenerar el modelo EF solo de las 14 tablas operativas a partir de la base ya alineada. Identity no entra en este paso.
+
+Con `ConnectionStrings:DefaultConnection` configurada en user-secrets (o variable de entorno), desde la raíz:
 
 ```powershell
 .\tools\scaffold.ps1
 ```
 
-El script restaura `dotnet-ef` y genera `SkyPortContext` en `src/SkyPort.Persistence/Context` junto con las entidades de las 14 tablas operativas en `src/SkyPort.Domain/Entities`. Usa `--force`, por lo que sobrescribe esos archivos generados. No genera las tablas Identity: estas se representan mediante `SkyPortIdentityDbContext` y el script `database/02_identity.sql`.
+El script genera primero en `artifacts/scaffold-review/` (fuera de los proyectos compilados), muestra diferencias frente a `src/SkyPort.Domain/Entities` y `src/SkyPort.Persistence/Context`, y **no sobrescribe** archivos versionados. Tras revisar:
 
-Vuelve a ejecutar el scaffold cuando cambie la estructura de las tablas operativas en `database/01_schema.sql`, después de recrear o actualizar la base local. Los cambios al contenido de `database/03_seed.sql` no requieren regenerar entidades. No edites manualmente las entidades generadas ni `SkyPortContext`; conserva las modificaciones del modelo en los scripts SQL y vuelve a generar desde la base.
+```powershell
+.\tools\scaffold.ps1 -Apply
+```
+
+Eso copia la revisión a los directorios versionados. No edites a mano las entidades ni `SkyPortContext`. Identity sigue en `SkyPortIdentityDbContext` y `database/02_identity.sql`. Los cambios solo en `03_seed.sql` no requieren scaffolding.
 
 La cadena de conexión y los secretos locales no se guardan en el repositorio. Consulta [CONFIGURACION.md](CONFIGURACION.md) para preparar el entorno.
 
