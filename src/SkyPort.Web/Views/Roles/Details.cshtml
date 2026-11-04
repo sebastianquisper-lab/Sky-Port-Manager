@@ -1,0 +1,19 @@
+@model SkyPort.Application.Dtos.Roles.RolDetalleDto
+@{
+    ViewData["Title"] = "Detalle de rol";
+}
+
+<h1 class="h2 mb-4">Detalle de rol</h1>
+<div class="card shadow-sm"><div class="card-body">
+    <dl class="row"><dt class="col-sm-3">Nombre</dt><dd class="col-sm-9">@Model.Name</dd><dt class="col-sm-3">Clave</dt><dd class="col-sm-9">@Model.Id</dd></dl>
+    <h2 class="h5">Miembros</h2>
+    @if (Model.UserEmails.Count == 0)
+    {
+        <p class="text-secondary">Este rol no tiene miembros.</p>
+    }
+    else
+    {
+        <ul>@foreach (var email in Model.UserEmails) { <li>@email</li> }</ul>
+    }
+</div></div>
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">Volver a roles</a>

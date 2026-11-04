@@ -1,0 +1,24 @@
+@model IReadOnlyList<SkyPort.Application.Dtos.Roles.RolDto>
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div><h1 class="h2 mb-1">Roles</h1><p class="text-secondary mb-0">Roles configurados en ASP.NET Core Identity.</p></div>
+</div>
+<div class="card shadow-sm"><div class="table-responsive"><table class="table table-hover align-middle mb-0">
+    <thead><tr><th>Nombre</th><th>Clave</th><th></th></tr></thead>
+    <tbody>
+    @if (Model.Count == 0)
+    {
+        <tr><td colspan="3" class="text-center text-secondary py-4">No hay roles registrados.</td></tr>
+    }
+    else
+    {
+        @foreach (var role in Model)
+        {
+            <tr><th scope="row">@role.Name</th><td>@role.Id</td><td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@role.Id">Ver</a></td></tr>
+        }
+    }
+    </tbody>
+</table></div></div>
