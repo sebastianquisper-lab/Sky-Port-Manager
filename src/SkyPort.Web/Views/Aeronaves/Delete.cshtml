@@ -1,0 +1,9 @@
+@model SkyPort.Application.Dtos.Aeronaves.AeronaveDto
+@{ ViewData["Title"] = "Eliminar aeronave"; }
+<h1>Eliminar aeronave</h1>
+<p>Confirma la eliminacion de @Model.Matricula. Solo se permite si no tiene vuelos asociados.</p>
+<form asp-action="Delete" asp-route-id="@Model.AeronaveId" method="post">
+<div asp-validation-summary="All" class="text-danger"></div>
+<button type="submit" class="btn btn-danger">Eliminar</button>
+<a asp-action="Details" asp-route-id="@Model.AeronaveId">Cancelar</a>
+</form>

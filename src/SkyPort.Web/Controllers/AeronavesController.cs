@@ -11,6 +11,23 @@ namespace SkyPort.Web.Controllers;
 public sealed class AeronavesController(IMediator mediator) : Controller
 {
     [HttpGet, Authorize(Policy = Policies.SoloAdmin)]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetAeronaveByIdQuery(id), cancellationToken);
+        return result.IsSuccess ? View(result.Value) : NotFound();
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Authorize(Policy = Policies.SoloAdmin)]
+    public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new DeleteAeronaveCommand(id), cancellationToken);
+        if (result.IsSuccess) return RedirectToAction(nameof(Index));
+        if (result.Error?.Type == SkyPort.Application.Common.ErrorType.NotFound) return NotFound();
+        ModelState.AddModelError(string.Empty, result.Error!.Message);
+        var row = await mediator.Send(new GetAeronaveByIdQuery(id), cancellationToken);
+        return row.IsSuccess ? View("Delete", row.Value) : NotFound();
+    }
+    [HttpGet, Authorize(Policy = Policies.SoloAdmin)]
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetAeronaveByIdQuery(id), cancellationToken);
