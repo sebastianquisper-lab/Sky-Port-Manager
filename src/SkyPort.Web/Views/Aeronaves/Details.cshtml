@@ -1,6 +1,7 @@
 @model SkyPort.Application.Dtos.Aeronaves.AeronaveDto
 @{ ViewData["Title"] = "Detalle de aeronave"; }
 <h1>@Model.Matricula</h1>
+<a asp-action="Edit" asp-route-id="@Model.AeronaveId">Editar</a>
 <dl>
 <dt>Modelo</dt><dd>@Model.Modelo</dd>
 <dt>Aerolinea</dt><dd>@Model.AerolineaId</dd>
