@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using SkyPort.Application.Common.Constants;
 using SkyPort.Application.UseCases.Usuarios.Commands;
 using SkyPort.Application.UseCases.Usuarios.Queries;
@@ -122,5 +123,38 @@ public sealed class UsuariosController(IMediator mediator) : Controller
             ? "El rol se revocó correctamente. La cookie de la cuenta se actualizará en su próxima validación de seguridad."
             : result.Error?.Message ?? "No se pudo revocar el rol.";
         return RedirectToAction(nameof(Details), new { id = userId });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(string id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetUsuarioByIdQuery(id), cancellationToken);
+        if (!result.IsSuccess || result.Value is null)
+        {
+            return NotFound();
+        }
+
+        return View(new Models.DeleteUsuarioViewModel(result.Value.Id, result.Value.Email));
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(string id, CancellationToken cancellationToken)
+    {
+        var actorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(actorId))
+        {
+            return Forbid();
+        }
+
+        var result = await mediator.Send(new DeleteUsuarioCommand(id, actorId), cancellationToken);
+        if (!result.IsSuccess)
+        {
+            TempData["Error"] = result.Error?.Message ?? "No se pudo eliminar el usuario.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        TempData["Success"] = "El usuario se eliminó correctamente.";
+        return RedirectToAction(nameof(Index));
     }
 }

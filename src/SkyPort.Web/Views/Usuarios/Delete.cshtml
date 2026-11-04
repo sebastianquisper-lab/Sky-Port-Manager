@@ -1,0 +1,14 @@
+@model SkyPort.Web.Models.DeleteUsuarioViewModel
+@{
+    ViewData["Title"] = "Eliminar usuario";
+}
+
+<h1 class="h2 mb-4">Eliminar usuario</h1>
+<div class="card border-danger shadow-sm"><div class="card-body">
+    <p>¿Confirmas que quieres eliminar la cuenta <strong>@(Model.Email ?? Model.Id)</strong>?</p>
+    <p class="text-secondary">No se pueden eliminar la cuenta actual ni las cuentas con rol Administrador.</p>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <button type="submit" class="btn btn-danger">Eliminar cuenta</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div></div>

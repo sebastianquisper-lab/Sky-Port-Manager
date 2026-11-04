@@ -12,4 +12,6 @@ public interface IUsuarioIdentityService
     Task<Result<UsuarioDetalleDto>> CreateAsync(string email, string password, CancellationToken cancellationToken);
 
     Task<Result> UpdateProfileAsync(string id, string email, string userName, CancellationToken cancellationToken);
+
+    Task<Result> DeleteAsync(string id, string actorId, CancellationToken cancellationToken);
 }

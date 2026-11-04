@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SkyPort.Application.Common;
 using SkyPort.Application.Dtos.Usuarios;
 using SkyPort.Application.Ports;
+using SkyPort.Application.Common.Constants;
 using SkyPort.Persistence.Identity;
 
 namespace SkyPort.Infrastructure.Services;
@@ -107,5 +108,36 @@ public sealed class UsuarioIdentityService(UserManager<ApplicationUser> userMana
         }
 
         return Result.Failure(Error.Validation("Identity rechazó los datos del perfil."));
+    }
+
+    public async Task<Result> DeleteAsync(string id, string actorId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (string.Equals(id, actorId, StringComparison.Ordinal))
+        {
+            return Result.Failure(Error.Forbidden("No puedes eliminar la cuenta con la que iniciaste esta acción."));
+        }
+
+        var user = await userManager.FindByIdAsync(id);
+        if (user is null)
+        {
+            return Result.Failure(Error.NotFound("No se encontró el usuario."));
+        }
+
+        if (await userManager.IsInRoleAsync(user, Roles.Administrador))
+        {
+            return Result.Failure(Error.Forbidden("No se pueden eliminar cuentas con acceso administrativo."));
+        }
+
+        var result = await userManager.DeleteAsync(user);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (result.Succeeded)
+        {
+            return Result.Success();
+        }
+
+        return result.Errors.Any(error => error.Code == "ConcurrencyFailure")
+            ? Result.Failure(Error.Conflict("La cuenta cambió desde que se abrió la confirmación. Recarga los datos e inténtalo nuevamente."))
+            : Result.Failure(Error.Validation("Identity no pudo eliminar la cuenta."));
     }
 }
