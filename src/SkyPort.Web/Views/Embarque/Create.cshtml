@@ -1,0 +1,35 @@
+@model SkyPort.Web.Models.EmbarqueViewModel
+@{
+    ViewData["Title"] = "Registrar embarque";
+}
+
+<h1 class="h2 mb-4">Registrar embarque</h1>
+<div class="card shadow-sm"><div class="card-body">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    @if (Model.Boletos.Count == 0)
+    {
+        <p class="text-secondary">No hay boletos confirmados con check-in realizado pendientes de embarque.</p>
+        <a asp-action="Index" class="btn btn-outline-secondary">Volver a embarques</a>
+    }
+    else
+    {
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="BoletoId" class="form-label"></label>
+                <select asp-for="BoletoId" class="form-select">
+                    <option value="0">Selecciona un boleto</option>
+                    @foreach (var ticket in Model.Boletos)
+                    {
+                        var gateText = ticket.Puerta is null ? "sin puerta asignada" : $"puerta {ticket.Puerta}";
+                        <option value="@ticket.BoletoId" selected="@(Model.BoletoId == ticket.BoletoId ? "selected" : null)">@ticket.Etiqueta · @gateText</option>
+                    }
+                </select>
+                <span asp-validation-for="BoletoId" class="text-danger"></span>
+            </div>
+            <p class="form-text">El embarque usará la puerta asignada al vuelo, si existe. La fecha y hora se registrarán en hora local del servidor.</p>
+            <button type="submit" class="btn btn-primary">Registrar embarque</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </form>
+    }
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

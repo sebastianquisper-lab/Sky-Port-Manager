@@ -33,4 +33,24 @@ public sealed class EmbarqueQueries(SkyPortContext context) : IEmbarqueQueries
                 boarding.Puerta == null ? null : boarding.Puerta.Codigo,
                 boarding.FechaHora))
             .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<EmbarqueCreateOptionsDto> GetCreateOptionsAsync(CancellationToken cancellationToken)
+    {
+        var eligibleTickets = await context.Boleto
+            .AsNoTracking()
+            .Where(ticket => ticket.Estado == SkyPort.Application.Common.Constants.EstadoBoleto.CheckInRealizado &&
+                             ticket.Checkin != null &&
+                             ticket.Reserva.Estado == SkyPort.Application.Common.Constants.EstadoReserva.Confirmada &&
+                             ticket.Embarque == null)
+            .OrderBy(ticket => ticket.CodigoBoleto)
+            .Select(ticket => new EmbarqueBoletoOptionDto(
+                ticket.BoletoId,
+                ticket.CodigoBoleto + " · " + ticket.Reserva.Pasajero.Nombres + " " + ticket.Reserva.Pasajero.Apellidos +
+                " · " + ticket.Reserva.Vuelo.NumeroVuelo,
+                ticket.Reserva.Vuelo.PuertaId,
+                ticket.Reserva.Vuelo.Puerta == null ? null : ticket.Reserva.Vuelo.Puerta.Codigo))
+            .ToListAsync(cancellationToken);
+
+        return new EmbarqueCreateOptionsDto(eligibleTickets);
+    }
 }

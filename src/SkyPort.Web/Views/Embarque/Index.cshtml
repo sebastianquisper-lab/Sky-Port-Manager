@@ -1,9 +1,14 @@
 @model IReadOnlyList<SkyPort.Application.Dtos.Embarques.EmbarqueListItemDto>
 @{
     ViewData["Title"] = "Embarques";
+    var puedeRegistrar = User.IsInRole(SkyPort.Application.Common.Constants.Roles.Administrador) ||
+                         User.IsInRole(SkyPort.Application.Common.Constants.Roles.AgenteCheckIn);
 }
 
-<div class="mb-4"><h1 class="h2 mb-1">Embarques</h1><p class="text-secondary mb-0">Consulta los registros de embarque.</p></div>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div><h1 class="h2 mb-1">Embarques</h1><p class="text-secondary mb-0">Consulta los registros de embarque.</p></div>
+    @if (puedeRegistrar) { <a class="btn btn-primary" asp-action="Create">Registrar embarque</a> }
+</div>
 
 <div class="card shadow-sm"><div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
