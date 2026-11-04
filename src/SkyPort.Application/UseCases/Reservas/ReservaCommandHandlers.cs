@@ -164,20 +164,21 @@ public sealed class CancelReservaCommandHandler(IUnitOfWork unitOfWork)
             return Result.Failure(Error.Conflict("Solo se pueden cancelar reservas confirmadas."));
         }
 
-        var boleto = await unitOfWork.Boletos.FirstOrDefaultAsync(
+        var boletoEncontrado = await unitOfWork.Boletos.FirstOrDefaultAsync(
             item => item.ReservaId == reserva.ReservaId,
             cancellationToken);
+        var boleto = boletoEncontrado is null
+            ? null
+            : await unitOfWork.Boletos.GetByIdAsync(boletoEncontrado.BoletoId, cancellationToken);
         if (boleto is not null && boleto.Estado != EstadoBoleto.Emitido)
         {
             return Result.Failure(Error.Conflict("No se puede cancelar la reserva después del check-in."));
         }
 
         reserva.Estado = EstadoReserva.Cancelada;
-        unitOfWork.Reservas.Update(reserva);
         if (boleto is not null)
         {
             boleto.Estado = EstadoBoleto.Cancelado;
-            unitOfWork.Boletos.Update(boleto);
         }
 
         await unitOfWork.CompleteAsync(cancellationToken);
