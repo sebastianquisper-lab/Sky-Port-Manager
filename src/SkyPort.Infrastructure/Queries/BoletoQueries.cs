@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SkyPort.Application.Common;
+using SkyPort.Application.Common.Constants;
 using SkyPort.Application.Dtos.Boletos;
 using SkyPort.Application.Ports;
 using SkyPort.Persistence.Context;
@@ -21,6 +22,14 @@ public sealed class BoletoQueries(SkyPortContext context) : IBoletoQueries
 
     public Task<BoletoDto?> GetByIdAsync(int boletoId, CancellationToken cancellationToken = default) =>
         Query().FirstOrDefaultAsync(x => x.BoletoId == boletoId, cancellationToken);
+
+    public async Task<IReadOnlyList<BoletoCheckInOptionDto>> GetForCheckInAsync(CancellationToken cancellationToken = default) =>
+        await context.Boleto.AsNoTracking()
+            .Where(b => b.Estado == EstadoBoleto.Emitido && b.Reserva.Estado == EstadoReserva.Confirmada && b.Checkin == null)
+            .OrderBy(b => b.Reserva.Codigo)
+            .Select(b => new BoletoCheckInOptionDto(b.BoletoId, b.CodigoBoleto, b.Reserva.Codigo,
+                b.Reserva.Pasajero.Nombres + " " + b.Reserva.Pasajero.Apellidos))
+            .ToListAsync(cancellationToken);
 
     private IQueryable<BoletoDto> Query() => context.Boleto.AsNoTracking().Select(b => new BoletoDto(
         b.BoletoId, b.ReservaId, b.CodigoBoleto, b.FechaEmision, b.Estado, b.Reserva.Codigo,

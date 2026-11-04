@@ -22,6 +22,11 @@ public sealed class CheckInQueries(SkyPortContext context) : ICheckInQueries
     public Task<CheckInDto?> GetByIdAsync(int checkInId, CancellationToken cancellationToken = default) =>
         Query().FirstOrDefaultAsync(x => x.CheckInId == checkInId, cancellationToken);
 
+    public async Task<IReadOnlyList<CheckInEmployeeOptionDto>> GetEmployeesAsync(CancellationToken cancellationToken = default) =>
+        await context.Empleado.AsNoTracking().OrderBy(e => e.Apellidos).ThenBy(e => e.Nombres)
+            .Select(e => new CheckInEmployeeOptionDto(e.EmpleadoId, e.Nombres + " " + e.Apellidos))
+            .ToListAsync(cancellationToken);
+
     private IQueryable<CheckInDto> Query() => context.Checkin.AsNoTracking().Select(c => new CheckInDto(
         c.CheckInId, c.BoletoId, c.Boleto.CodigoBoleto, c.Boleto.ReservaId, c.Boleto.Reserva.Codigo,
         c.Boleto.Reserva.Pasajero.Nombres + " " + c.Boleto.Reserva.Pasajero.Apellidos,

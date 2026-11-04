@@ -7,4 +7,5 @@ public interface ICheckInQueries
 {
     Task<PagedResult<CheckInDto>> GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
     Task<CheckInDto?> GetByIdAsync(int checkInId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<CheckInEmployeeOptionDto>> GetEmployeesAsync(CancellationToken cancellationToken = default);
 }
