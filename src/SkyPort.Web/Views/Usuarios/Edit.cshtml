@@ -1,0 +1,17 @@
+@model SkyPort.Web.Models.UsuarioPerfilViewModel
+@{
+    ViewData["Title"] = "Editar perfil";
+}
+
+<h1 class="h2 mb-4">Editar perfil</h1>
+<div class="card shadow-sm"><div class="card-body">
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <input asp-for="Id" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" autocomplete="email" /><span asp-validation-for="Email" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="UserName" class="form-label"></label><input asp-for="UserName" class="form-control" autocomplete="username" /><span asp-validation-for="UserName" class="text-danger"></span></div>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

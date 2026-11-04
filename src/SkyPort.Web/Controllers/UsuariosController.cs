@@ -58,4 +58,41 @@ public sealed class UsuariosController(IMediator mediator) : Controller
         TempData["Success"] = "El usuario se creó correctamente.";
         return RedirectToAction(nameof(Details), new { id = result.Value.Id });
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(string id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetUsuarioByIdQuery(id), cancellationToken);
+        if (!result.IsSuccess || result.Value is null)
+        {
+            return NotFound();
+        }
+
+        return View(new Models.UsuarioPerfilViewModel { Id = result.Value.Id, Email = result.Value.Email ?? string.Empty, UserName = result.Value.UserName ?? string.Empty });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(string id, Models.UsuarioPerfilViewModel model, CancellationToken cancellationToken)
+    {
+        if (!string.Equals(id, model.Id, StringComparison.Ordinal))
+        {
+            return BadRequest();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var result = await mediator.Send(new UpdateUsuarioCommand(model.Id, model.Email, model.UserName), cancellationToken);
+        if (!result.IsSuccess)
+        {
+            ModelState.AddModelError(string.Empty, result.Error?.Message ?? "No se pudo actualizar el perfil.");
+            return View(model);
+        }
+
+        TempData["Success"] = "El perfil se actualizó correctamente.";
+        return RedirectToAction(nameof(Details), new { id = model.Id });
+    }
 }
