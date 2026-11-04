@@ -1,0 +1,10 @@
+@model SkyPort.Application.Dtos.Terminales.TerminalDto
+@{ ViewData["Title"] = "Detalle de terminal"; }
+<h1>@Model.Nombre</h1>
+<a asp-action="Edit" asp-route-id="@Model.TerminalId">Editar</a>
+<a asp-action="Delete" asp-route-id="@Model.TerminalId">Eliminar</a>
+<dl>
+    <dt>Id</dt><dd>@Model.TerminalId</dd>
+    <dt>Nombre</dt><dd>@Model.Nombre</dd>
+</dl>
+<a asp-action="Index">Volver a terminales</a>

@@ -1,0 +1,9 @@
+@model SkyPort.Application.Dtos.Terminales.TerminalDto
+@{ ViewData["Title"] = "Eliminar terminal"; }
+<h1>Eliminar terminal</h1>
+<p>Confirma la eliminación de la terminal @Model.Nombre. No se puede eliminar si tiene puertas asociadas.</p>
+<form asp-action="Delete" asp-route-id="@Model.TerminalId" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Details" asp-route-id="@Model.TerminalId" class="btn btn-secondary">Cancelar</a>
+</form>

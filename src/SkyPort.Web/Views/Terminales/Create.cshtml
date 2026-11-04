@@ -1,0 +1,13 @@
+@model SkyPort.Web.Models.TerminalViewModel
+@{ ViewData["Title"] = "Crear terminal"; }
+<h1>Crear terminal</h1>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" maxlength="50" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
