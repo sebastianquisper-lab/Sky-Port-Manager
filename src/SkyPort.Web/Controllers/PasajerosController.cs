@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SkyPort.Application.Common;
 using SkyPort.Application.Common.Constants;
 using SkyPort.Application.UseCases.Pasajeros;
+using SkyPort.Application.UseCases.Pasajeros.Queries;
 using SkyPort.Web.Models;
 
 namespace SkyPort.Web.Controllers;

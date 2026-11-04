@@ -1,7 +1,7 @@
 using MediatR;
 using SkyPort.Application.Common;
 using SkyPort.Application.Ports;
-using SkyPort.Application.UseCases.Pasajeros.Dtos;
+using SkyPort.Application.Dtos.Pasajeros;
 using SkyPort.Domain.Entities;
 using SkyPort.Domain.Exceptions;
 using SkyPort.Domain.Ports;

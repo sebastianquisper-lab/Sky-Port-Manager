@@ -1,4 +1,4 @@
-namespace SkyPort.Application.UseCases.Pasajeros.Dtos;
+namespace SkyPort.Application.Dtos.Pasajeros;
 
 public sealed record PasajeroDto(
     int PasajeroId,
