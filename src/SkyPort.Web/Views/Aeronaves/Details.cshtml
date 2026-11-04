@@ -1,0 +1,10 @@
+@model SkyPort.Application.Dtos.Aeronaves.AeronaveDto
+@{ ViewData["Title"] = "Detalle de aeronave"; }
+<h1>@Model.Matricula</h1>
+<dl>
+<dt>Modelo</dt><dd>@Model.Modelo</dd>
+<dt>Aerolinea</dt><dd>@Model.AerolineaId</dd>
+<dt>Capacidad</dt><dd>@Model.Capacidad</dd>
+<dt>Estado</dt><dd>@Model.Estado</dd>
+</dl>
+<a asp-action="Index">Volver</a>

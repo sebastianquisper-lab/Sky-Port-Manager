@@ -7,7 +7,7 @@
 <tbody>
 @foreach (var row in Model)
 {
-<tr><td>@row.AeronaveId</td><td>@row.AerolineaId</td><td>@row.Matricula</td><td>@row.Modelo</td><td>@row.Capacidad</td><td>@row.Estado</td></tr>
+<tr><td><a asp-action="Details" asp-route-id="@row.AeronaveId">@row.AeronaveId</a></td><td>@row.AerolineaId</td><td>@row.Matricula</td><td>@row.Modelo</td><td>@row.Capacidad</td><td>@row.Estado</td></tr>
 }
 </tbody>
 </table>
