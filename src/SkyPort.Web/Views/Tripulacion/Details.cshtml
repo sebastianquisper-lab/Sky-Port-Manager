@@ -1,0 +1,5 @@
+@model SkyPort.Application.Dtos.TripulacionVuelo.TripulacionVueloDto
+@{ ViewData["Title"] = "Detalle de asignacion"; }
+<h1>Detalle de asignacion</h1>
+<dl><dt>Vuelo</dt><dd>@Model.VueloId</dd><dt>Empleado</dt><dd>@Model.EmpleadoId</dd><dt>Rol a bordo</dt><dd>@Model.RolAbordo</dd></dl>
+<a asp-action="Index">Volver</a>

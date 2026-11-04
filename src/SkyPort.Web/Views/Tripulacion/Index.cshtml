@@ -7,6 +7,6 @@
 <tbody>
 @foreach (var row in Model)
 {
-<tr><td>@row.VueloId</td><td>@row.EmpleadoId</td><td>@row.RolAbordo</td></tr>
+<tr><td><a asp-action="Details" asp-route-vueloId="@row.VueloId" asp-route-empleadoId="@row.EmpleadoId">@row.VueloId</a></td><td>@row.EmpleadoId</td><td>@row.RolAbordo</td></tr>
 }
 </tbody></table>
