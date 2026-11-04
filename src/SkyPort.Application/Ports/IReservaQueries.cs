@@ -9,6 +9,8 @@ public interface IReservaQueries
 
     Task<ReservaDto?> GetByIdAsync(int reservaId, CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<ReservaBoletoOptionDto>> GetReservasParaBoletoAsync(CancellationToken cancellationToken = default);
+
     Task<IReadOnlyList<VueloAbiertoDto>> GetVuelosAbiertosAsync(CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<ReservaDto>> GetByVueloAsync(int vueloId, CancellationToken cancellationToken = default);

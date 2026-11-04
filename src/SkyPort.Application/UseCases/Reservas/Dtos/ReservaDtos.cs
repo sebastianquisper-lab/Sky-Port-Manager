@@ -34,3 +34,5 @@ public sealed record AsientosVueloDto(
     int Capacidad,
     int Filas,
     IReadOnlyList<string> AsientosOcupados);
+
+public sealed record ReservaBoletoOptionDto(int ReservaId, string Codigo, string NombrePasajero, string NumeroVuelo, string Asiento);

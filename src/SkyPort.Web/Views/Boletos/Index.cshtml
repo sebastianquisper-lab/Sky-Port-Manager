@@ -1,6 +1,6 @@
 @model SkyPort.Application.Common.PagedResult<SkyPort.Application.Dtos.Boletos.BoletoDto>
 @{ ViewData["Title"] = "Boletos"; }
-<div class="mb-4"><h1 class="h2">Boletos</h1><p class="text-secondary">@Model.TotalCount boletos emitidos</p></div>
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="h2">Boletos</h1><p class="text-secondary">@Model.TotalCount boletos emitidos</p></div>@if (User.IsInRole(SkyPort.Application.Common.Constants.Roles.Administrador) || User.IsInRole(SkyPort.Application.Common.Constants.Roles.AgenteCheckIn)) { <a asp-action="Create" class="btn btn-primary">Emitir boleto</a> }</div>
 <div class="table-responsive"><table class="table table-hover align-middle">
 <thead><tr><th>Código</th><th>Reserva</th><th>Pasajero</th><th>Vuelo</th><th>Fecha de emisión</th><th>Estado</th></tr></thead>
 <tbody>

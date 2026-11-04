@@ -1,0 +1,11 @@
+@model SkyPort.Web.Models.BoletoViewModel
+@{ ViewData["Title"] = "Emitir boleto"; var canIssue = User.IsInRole(SkyPort.Application.Common.Constants.Roles.Administrador) || User.IsInRole(SkyPort.Application.Common.Constants.Roles.AgenteCheckIn); }
+<div class="mb-4"><h1 class="h2">Emitir boleto</h1><p class="text-secondary">Se puede emitir un boleto para una reserva confirmada que aún no tenga boleto.</p></div>
+<form asp-action="Create" method="post" class="card card-body">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <label asp-for="ReservaId" class="form-label">Reserva confirmada</label>
+    <select asp-for="ReservaId" asp-items="Model.Reservas" class="form-select"><option value="">Selecciona una reserva</option></select>
+    <span asp-validation-for="ReservaId" class="text-danger"></span>
+    <div class="d-flex gap-2 mt-4"><button type="submit" class="btn btn-primary" disabled="@(!canIssue)">Emitir</button><a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

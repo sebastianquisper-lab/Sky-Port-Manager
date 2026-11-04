@@ -24,6 +24,14 @@ public sealed class ReservaQueries(SkyPortContext context) : IReservaQueries
     public Task<ReservaDto?> GetByIdAsync(int reservaId, CancellationToken cancellationToken = default) =>
         GetReservasQuery().FirstOrDefaultAsync(x => x.ReservaId == reservaId, cancellationToken);
 
+    public async Task<IReadOnlyList<ReservaBoletoOptionDto>> GetReservasParaBoletoAsync(CancellationToken cancellationToken = default) =>
+        await context.Reserva.AsNoTracking()
+            .Where(r => r.Estado == EstadoReserva.Confirmada && r.Boleto == null)
+            .OrderBy(r => r.FechaReserva).ThenBy(r => r.ReservaId)
+            .Select(r => new ReservaBoletoOptionDto(r.ReservaId, r.Codigo,
+                r.Pasajero.Nombres + " " + r.Pasajero.Apellidos, r.Vuelo.NumeroVuelo, r.Asiento))
+            .ToListAsync(cancellationToken);
+
     public async Task<IReadOnlyList<VueloAbiertoDto>> GetVuelosAbiertosAsync(
         CancellationToken cancellationToken = default)
     {
