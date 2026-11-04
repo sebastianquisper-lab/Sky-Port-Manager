@@ -1,9 +1,14 @@
 @model IReadOnlyList<SkyPort.Application.Dtos.Rutas.RutaDto>
 @{
     ViewData["Title"] = "Rutas";
+    var puedeGestionar = User.IsInRole(SkyPort.Application.Common.Constants.Roles.Administrador) ||
+                         User.IsInRole(SkyPort.Application.Common.Constants.Roles.OperadorVuelos);
 }
 
-<div class="mb-4"><h1 class="h2 mb-1">Rutas</h1><p class="text-secondary mb-0">Consulta los trayectos registrados.</p></div>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div><h1 class="h2 mb-1">Rutas</h1><p class="text-secondary mb-0">Consulta los trayectos registrados.</p></div>
+    @if (puedeGestionar) { <a class="btn btn-primary" asp-action="Create">Crear ruta</a> }
+</div>
 
 <div class="card shadow-sm"><div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
