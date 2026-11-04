@@ -1,4 +1,5 @@
-@model SkyPort.Application.Dtos.Usuarios.UsuarioDetalleDto
+@model SkyPort.Web.Models.UsuarioAdminDetailsViewModel
+@using SkyPort.Application.Common.Constants
 @{
     ViewData["Title"] = "Detalle de usuario";
 }
@@ -6,11 +7,48 @@
 <h1 class="h2 mb-4">Detalle de usuario</h1>
 <div class="card shadow-sm"><div class="card-body">
     <dl class="row mb-0">
-        <dt class="col-sm-3">Correo</dt><dd class="col-sm-9">@(Model.Email ?? "—")</dd>
-        <dt class="col-sm-3">Nombre de usuario</dt><dd class="col-sm-9">@(Model.UserName ?? "—")</dd>
-        <dt class="col-sm-3">Correo confirmado</dt><dd class="col-sm-9">@(Model.EmailConfirmado ? "Sí" : "No")</dd>
-        <dt class="col-sm-3">Roles</dt><dd class="col-sm-9">@(Model.Roles.Count == 0 ? "Sin roles" : string.Join(", ", Model.Roles))</dd>
+        <dt class="col-sm-3">Correo</dt><dd class="col-sm-9">@(Model.Usuario.Email ?? "—")</dd>
+        <dt class="col-sm-3">Nombre de usuario</dt><dd class="col-sm-9">@(Model.Usuario.UserName ?? "—")</dd>
+        <dt class="col-sm-3">Correo confirmado</dt><dd class="col-sm-9">@(Model.Usuario.EmailConfirmado ? "Sí" : "No")</dd>
     </dl>
+    <h2 class="h5 mt-4">Roles</h2>
+    @if (Model.Roles.Count == 0)
+    {
+        <p class="text-secondary">No hay roles disponibles.</p>
+    }
+    else
+    {
+        <div class="table-responsive"><table class="table align-middle"><thead><tr><th>Rol</th><th>Estado</th><th>Acción</th></tr></thead><tbody>
+        @foreach (var role in Model.Roles)
+        {
+            <tr>
+                <th scope="row">@role.RoleName</th><td>@(role.Assigned ? "Asignado" : "No asignado")</td>
+                <td class="text-end">
+                    @if (role.Assigned && string.Equals(role.RoleName, Roles.Administrador, StringComparison.OrdinalIgnoreCase))
+                    {
+                        <span class="text-secondary">Protegido</span>
+                    }
+                    else if (role.Assigned)
+                    {
+                        <form asp-action="RevokeRole" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@Model.Usuario.Id" />
+                            <input type="hidden" name="roleId" value="@role.RoleId" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Revocar</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="AssignRole" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@Model.Usuario.Id" />
+                            <input type="hidden" name="roleId" value="@role.RoleId" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Asignar</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody></table></div>
+    }
 </div></div>
 <a class="btn btn-outline-secondary mt-3" asp-action="Index">Volver a usuarios</a>
-<a class="btn btn-outline-primary mt-3" asp-action="Edit" asp-route-id="@Model.Id">Editar perfil</a>
+<a class="btn btn-outline-primary mt-3" asp-action="Edit" asp-route-id="@Model.Usuario.Id">Editar perfil</a>

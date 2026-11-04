@@ -29,7 +29,13 @@ public sealed class UsuariosController(IMediator mediator) : Controller
             return NotFound();
         }
 
-        return View(result.Value);
+        var memberships = await mediator.Send(new GetUsuarioRolesQuery(id), cancellationToken);
+        if (!memberships.IsSuccess || memberships.Value is null)
+        {
+            return NotFound();
+        }
+
+        return View(new Models.UsuarioAdminDetailsViewModel(result.Value, memberships.Value));
     }
 
     [HttpGet]
@@ -94,5 +100,27 @@ public sealed class UsuariosController(IMediator mediator) : Controller
 
         TempData["Success"] = "El perfil se actualizó correctamente.";
         return RedirectToAction(nameof(Details), new { id = model.Id });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AssignRole(string userId, string roleId, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new AsignarUsuarioRolCommand(userId, roleId), cancellationToken);
+        TempData[result.IsSuccess ? "Success" : "Error"] = result.IsSuccess
+            ? "El rol se asignó correctamente. La cookie de la cuenta se actualizará en su próxima validación de seguridad."
+            : result.Error?.Message ?? "No se pudo asignar el rol.";
+        return RedirectToAction(nameof(Details), new { id = userId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RevokeRole(string userId, string roleId, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new RevocarUsuarioRolCommand(userId, roleId), cancellationToken);
+        TempData[result.IsSuccess ? "Success" : "Error"] = result.IsSuccess
+            ? "El rol se revocó correctamente. La cookie de la cuenta se actualizará en su próxima validación de seguridad."
+            : result.Error?.Message ?? "No se pudo revocar el rol.";
+        return RedirectToAction(nameof(Details), new { id = userId });
     }
 }
