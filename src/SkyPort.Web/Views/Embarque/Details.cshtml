@@ -1,0 +1,16 @@
+@model SkyPort.Application.Dtos.Embarques.EmbarqueDetailDto
+@{
+    ViewData["Title"] = "Detalle de embarque";
+}
+
+<h1 class="h2 mb-4">Detalle de embarque</h1>
+<div class="card shadow-sm"><div class="card-body">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Boleto</dt><dd class="col-sm-9">@Model.CodigoBoleto</dd>
+        <dt class="col-sm-3">Pasajero</dt><dd class="col-sm-9">@Model.Pasajero</dd>
+        <dt class="col-sm-3">Vuelo</dt><dd class="col-sm-9">@Model.NumeroVuelo</dd>
+        <dt class="col-sm-3">Puerta</dt><dd class="col-sm-9">@(Model.Puerta ?? "Sin asignar")</dd>
+        <dt class="col-sm-3">Fecha y hora</dt><dd class="col-sm-9">@Model.FechaHora.ToString("yyyy-MM-dd HH:mm")</dd>
+    </dl>
+</div></div>
+<a class="btn btn-outline-secondary mt-3" asp-action="Index">Volver a embarques</a>

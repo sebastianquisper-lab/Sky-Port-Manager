@@ -15,4 +15,17 @@ public sealed class EmbarqueController(IMediator mediator) : Controller
         var boardings = await mediator.Send(new GetEmbarquesQuery(), cancellationToken);
         return View(boardings);
     }
+
+    [HttpGet]
+    [Authorize(Policy = Policies.TodosLosRoles)]
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new GetEmbarqueByIdQuery(id), cancellationToken);
+        if (!result.IsSuccess || result.Value is null)
+        {
+            return NotFound();
+        }
+
+        return View(result.Value);
+    }
 }

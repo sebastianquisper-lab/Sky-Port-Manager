@@ -7,11 +7,11 @@
 
 <div class="card shadow-sm"><div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
-        <thead><tr><th>Boleto</th><th>Pasajero</th><th>Vuelo</th><th>Puerta</th><th>Fecha y hora</th></tr></thead>
+        <thead><tr><th>Boleto</th><th>Pasajero</th><th>Vuelo</th><th>Puerta</th><th>Fecha y hora</th><th></th></tr></thead>
         <tbody>
         @if (Model.Count == 0)
         {
-            <tr><td colspan="5" class="text-center text-secondary py-4">No hay embarques registrados.</td></tr>
+            <tr><td colspan="6" class="text-center text-secondary py-4">No hay embarques registrados.</td></tr>
         }
         else
         {
@@ -20,6 +20,7 @@
                 <tr>
                     <th scope="row">@boarding.CodigoBoleto</th><td>@boarding.Pasajero</td><td>@boarding.NumeroVuelo</td>
                     <td>@(boarding.Puerta ?? "Sin asignar")</td><td>@boarding.FechaHora.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@boarding.EmbarqueId">Ver</a></td>
                 </tr>
             }
         }
