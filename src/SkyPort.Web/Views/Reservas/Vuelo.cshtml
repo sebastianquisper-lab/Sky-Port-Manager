@@ -1,4 +1,4 @@
-@model IReadOnlyList<SkyPort.Application.UseCases.Reservas.Dtos.ReservaDto>
+@model IReadOnlyList<SkyPort.Application.Dtos.Reservas.ReservaDto>
 @using SkyPort.Application.Common.Constants
 @{
     ViewData["Title"] = Model.FirstOrDefault()?.NumeroVuelo is string numero ? $"Reservas {numero}" : "Reservas del vuelo";

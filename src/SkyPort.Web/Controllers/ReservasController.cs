@@ -5,8 +5,8 @@ using SkyPort.Application.Common;
 using SkyPort.Application.Common.Constants;
 using SkyPort.Application.UseCases.Pasajeros;
 using SkyPort.Application.UseCases.Pasajeros.Queries;
-using SkyPort.Application.UseCases.Reservas;
-using SkyPort.Application.UseCases.Reservas.Dtos;
+using SkyPort.Application.UseCases.Reservas.Commands;
+using SkyPort.Application.Dtos.Reservas;
 using SkyPort.Application.UseCases.Reservas.Queries;
 using SkyPort.Web.Models;
 

@@ -1,4 +1,4 @@
-using SkyPort.Application.UseCases.Reservas.Dtos;
+using SkyPort.Application.Dtos.Reservas;
 using SkyPort.Application.Common;
 
 namespace SkyPort.Application.Ports;

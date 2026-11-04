@@ -2,8 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using SkyPort.Application.Common;
 using SkyPort.Application.Common.Constants;
 using SkyPort.Application.Ports;
-using SkyPort.Application.UseCases.Reservas;
-using SkyPort.Application.UseCases.Reservas.Dtos;
+using SkyPort.Application.Rules;
+using SkyPort.Application.Rules;
+using SkyPort.Application.Dtos.Reservas;
 using SkyPort.Persistence.Context;
 
 namespace SkyPort.Infrastructure.Queries;

@@ -1,4 +1,4 @@
-namespace SkyPort.Application.UseCases.Reservas.Dtos;
+namespace SkyPort.Application.Dtos.Reservas;
 
 public sealed record VueloAbiertoDto(
     int VueloId,

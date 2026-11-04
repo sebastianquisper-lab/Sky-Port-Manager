@@ -1,6 +1,6 @@
 using MediatR;
 using SkyPort.Application.Ports;
-using SkyPort.Application.UseCases.Reservas.Dtos;
+using SkyPort.Application.Dtos.Reservas;
 
 namespace SkyPort.Application.UseCases.Boletos.Queries;
 

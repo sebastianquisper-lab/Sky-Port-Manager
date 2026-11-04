@@ -1,6 +1,6 @@
 using NSubstitute;
 using SkyPort.Application.Common.Constants;
-using SkyPort.Application.UseCases.Reservas;
+using SkyPort.Application.UseCases.Reservas.Commands;
 using SkyPort.Domain.Entities;
 using SkyPort.Domain.Ports;
 

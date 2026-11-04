@@ -1,7 +1,7 @@
 using NSubstitute;
 using SkyPort.Application.Common;
 using SkyPort.Application.Ports;
-using SkyPort.Application.UseCases.Reservas.Dtos;
+using SkyPort.Application.Dtos.Reservas;
 using SkyPort.Application.UseCases.Reservas.Queries;
 
 namespace SkyPort.Tests.UseCases.Reservas;
