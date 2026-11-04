@@ -1,0 +1,11 @@
+@model SkyPort.Application.Dtos.CheckIn.CheckInDto
+@{ ViewData["Title"] = "Detalle de check-in"; }
+<div class="mb-4"><h1 class="h2">Check-in #@Model.CheckInId</h1><p class="text-secondary">Registro del pasajero y boleto.</p></div>
+<dl class="row">
+<dt class="col-sm-3">Boleto</dt><dd class="col-sm-9">@Model.CodigoBoleto (#@Model.BoletoId)</dd>
+<dt class="col-sm-3">Reserva</dt><dd class="col-sm-9">@Model.CodigoReserva (#@Model.ReservaId)</dd>
+<dt class="col-sm-3">Pasajero</dt><dd class="col-sm-9">@Model.NombrePasajero</dd>
+<dt class="col-sm-3">Empleado</dt><dd class="col-sm-9">@(Model.NombreEmpleado ?? "Sin asignar")</dd>
+<dt class="col-sm-3">Fecha</dt><dd class="col-sm-9">@Model.FechaHora.ToString("dd/MM/yyyy HH:mm")</dd>
+<dt class="col-sm-3">Documento verificado</dt><dd class="col-sm-9">@(Model.DocumentoVerificado ? "Sí" : "No")</dd>
+</dl><a asp-action="Index" class="btn btn-outline-secondary">Volver a check-in</a>
