@@ -1,0 +1,10 @@
+@model SkyPort.Application.Common.PagedResult<SkyPort.Application.Dtos.Boletos.BoletoDto>
+@{ ViewData["Title"] = "Boletos"; }
+<div class="mb-4"><h1 class="h2">Boletos</h1><p class="text-secondary">@Model.TotalCount boletos emitidos</p></div>
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>Código</th><th>Reserva</th><th>Pasajero</th><th>Vuelo</th><th>Fecha de emisión</th><th>Estado</th></tr></thead>
+<tbody>
+@if (Model.Items.Count == 0) { <tr><td colspan="6" class="text-center text-secondary py-4">No hay boletos emitidos.</td></tr> }
+@foreach (var item in Model.Items) { <tr><td>@item.CodigoBoleto</td><td>@item.CodigoReserva</td><td>@item.NombrePasajero</td><td>@item.NumeroVuelo · @item.Asiento</td><td>@item.FechaEmision.ToString("dd/MM/yyyy HH:mm")</td><td>@item.Estado</td></tr> }
+</tbody></table></div>
+@await Html.PartialAsync("_Pagination")
