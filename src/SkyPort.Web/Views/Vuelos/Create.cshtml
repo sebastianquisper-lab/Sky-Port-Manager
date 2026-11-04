@@ -1,0 +1,23 @@
+@model SkyPort.Web.Models.VueloCreateViewModel
+@{
+    ViewData["Title"] = "Crear vuelo";
+}
+
+<h1 class="h2 mb-4">Crear vuelo</h1>
+<div class="card shadow-sm"><div class="card-body">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="NumeroVuelo" class="form-label"></label><input asp-for="NumeroVuelo" class="form-control" maxlength="10" /><span asp-validation-for="NumeroVuelo" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="RutaId" class="form-label"></label><select asp-for="RutaId" asp-items="Model.Rutas" class="form-select"><option value="0">Selecciona una ruta</option></select><span asp-validation-for="RutaId" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="AeronaveId" class="form-label"></label><select asp-for="AeronaveId" asp-items="Model.Aeronaves" class="form-select"><option value="0">Selecciona una aeronave</option></select><span asp-validation-for="AeronaveId" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="PuertaId" class="form-label"></label><select asp-for="PuertaId" asp-items="Model.Puertas" class="form-select"><option value="">Sin puerta asignada</option></select><span asp-validation-for="PuertaId" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="FechaSalida" class="form-label"></label><input asp-for="FechaSalida" type="datetime-local" class="form-control" /><span asp-validation-for="FechaSalida" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="FechaLlegada" class="form-label"></label><input asp-for="FechaLlegada" type="datetime-local" class="form-control" /><span asp-validation-for="FechaLlegada" class="text-danger"></span></div>
+            <div class="col-md-6"><label class="form-label">Estado inicial</label><input class="form-control" value="Programado" readonly /></div>
+        </div>
+        <p class="form-text mt-3">Las fechas se registran en hora local de Lima.</p>
+        <div class="mt-4"><button type="submit" class="btn btn-primary">Crear vuelo</button><a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></div>
+    </form>
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

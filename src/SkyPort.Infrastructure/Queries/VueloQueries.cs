@@ -46,4 +46,31 @@ public sealed class VueloQueries(SkyPortContext context) : IVueloQueries
                 flight.FechaLlegada,
                 flight.Estado))
             .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<VueloLookupsDto> GetCreateOptionsAsync(CancellationToken cancellationToken)
+    {
+        var routes = await context.Ruta
+            .AsNoTracking()
+            .OrderBy(route => route.CodigoOrigen)
+            .ThenBy(route => route.CodigoDestino)
+            .Select(route => new RutaOpcionDto(
+                route.RutaId,
+                route.CodigoOrigen + " · " + route.CiudadOrigen + " → " + route.CodigoDestino + " · " + route.CiudadDestino))
+            .ToListAsync(cancellationToken);
+
+        var aircraft = await context.Aeronave
+            .AsNoTracking()
+            .OrderBy(item => item.Matricula)
+            .Select(item => new AeronaveOpcionDto(item.AeronaveId, item.Matricula + " · " + item.Modelo))
+            .ToListAsync(cancellationToken);
+
+        var gates = await context.Puerta
+            .AsNoTracking()
+            .OrderBy(gate => gate.Terminal.Nombre)
+            .ThenBy(gate => gate.Codigo)
+            .Select(gate => new PuertaOpcionDto(gate.PuertaId, gate.Terminal.Nombre + " · " + gate.Codigo))
+            .ToListAsync(cancellationToken);
+
+        return new VueloLookupsDto(routes, aircraft, gates);
+    }
 }
