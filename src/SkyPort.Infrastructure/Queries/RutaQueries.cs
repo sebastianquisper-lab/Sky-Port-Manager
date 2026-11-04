@@ -19,4 +19,7 @@ public sealed class RutaQueries(SkyPortContext context) : IRutaQueries
                 route.CiudadDestino,
                 route.DuracionMinutos))
             .FirstOrDefaultAsync(cancellationToken);
+
+    public Task<bool> IsUsedByFlightsAsync(int rutaId, CancellationToken cancellationToken) =>
+        context.Vuelo.AsNoTracking().AnyAsync(flight => flight.RutaId == rutaId, cancellationToken);
 }

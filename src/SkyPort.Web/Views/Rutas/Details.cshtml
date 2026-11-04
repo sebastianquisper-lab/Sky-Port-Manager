@@ -17,4 +17,5 @@
 @if (User.IsInRole(SkyPort.Application.Common.Constants.Roles.Administrador) || User.IsInRole(SkyPort.Application.Common.Constants.Roles.OperadorVuelos))
 {
     <a class="btn btn-outline-primary mt-3" asp-action="Edit" asp-route-id="@Model.RutaId">Editar duración</a>
+    <a class="btn btn-outline-danger mt-3" asp-action="Delete" asp-route-id="@Model.RutaId">Eliminar</a>
 }

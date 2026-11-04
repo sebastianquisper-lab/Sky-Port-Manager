@@ -28,7 +28,11 @@
                     <td>@route.DuracionMinutos min</td>
                     <td class="text-end text-nowrap">
                         <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@route.RutaId">Ver</a>
-                        @if (puedeGestionar) { <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@route.RutaId">Editar duración</a> }
+                        @if (puedeGestionar)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@route.RutaId">Editar duración</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@route.RutaId">Eliminar</a>
+                        }
                     </td>
                 </tr>
             }

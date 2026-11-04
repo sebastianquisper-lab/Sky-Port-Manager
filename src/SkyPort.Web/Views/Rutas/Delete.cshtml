@@ -1,0 +1,14 @@
+@model SkyPort.Application.Dtos.Rutas.RutaDto
+@{
+    ViewData["Title"] = "Eliminar ruta";
+}
+
+<h1 class="h2 mb-4">Eliminar ruta</h1>
+<div class="card border-danger shadow-sm"><div class="card-body">
+    <p>¿Confirmas que quieres eliminar la ruta <strong>@Model.CodigoOrigen · @Model.CiudadOrigen → @Model.CodigoDestino · @Model.CiudadDestino</strong>?</p>
+    <p class="text-secondary">Solo se puede eliminar si no tiene vuelos asociados.</p>
+    <form asp-action="Delete" asp-route-id="@Model.RutaId" method="post">
+        <button type="submit" class="btn btn-danger">Eliminar ruta</button>
+        <a asp-action="Details" asp-route-id="@Model.RutaId" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+</div></div>
