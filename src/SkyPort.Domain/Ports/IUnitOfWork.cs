@@ -32,5 +32,5 @@ public interface IUnitOfWork
 
     IGenericRepository<Vuelo> Vuelos { get; }
 
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<int> CompleteAsync(CancellationToken cancellationToken = default);
 }

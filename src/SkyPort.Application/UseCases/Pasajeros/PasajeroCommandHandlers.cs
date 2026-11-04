@@ -34,7 +34,7 @@ public sealed class CreatePasajeroCommandHandler(IUnitOfWork unitOfWork)
         await unitOfWork.Pasajeros.AddAsync(pasajero, cancellationToken);
         try
         {
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
         }
         catch (DuplicateKeyException)
         {
@@ -78,7 +78,7 @@ public sealed class UpdatePasajeroCommandHandler(IUnitOfWork unitOfWork)
         values.ApplyTo(pasajero);
         try
         {
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.CompleteAsync(cancellationToken);
         }
         catch (DuplicateKeyException)
         {
@@ -109,7 +109,7 @@ public sealed class DeletePasajeroCommandHandler(IUnitOfWork unitOfWork)
         }
 
         unitOfWork.Pasajeros.Remove(pasajero);
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
         return Result.Success();
     }
 }

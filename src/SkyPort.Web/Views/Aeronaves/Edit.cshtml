@@ -1,0 +1,18 @@
+@model AeronaveViewModel
+@using SkyPort.Application.Common.Constants
+@{ ViewData["Title"] = "Editar aeronave"; }
+<h1>Editar aeronave</h1>
+<p>Los cambios de capacidad con vuelos asociados requieren una politica acordada.</p>
+<form asp-action="Edit" asp-route-id="@Model.AeronaveId" method="post">
+<input type="hidden" asp-for="AeronaveId" />
+<div asp-validation-summary="All" class="text-danger"></div>
+<label asp-for="AerolineaId">Aerolinea</label><select asp-for="AerolineaId" asp-items="Model.Aerolineas" class="form-select"></select>
+<label asp-for="Matricula"></label><input asp-for="Matricula" class="form-control" />
+<label asp-for="Modelo"></label><input asp-for="Modelo" class="form-control" />
+<label asp-for="Capacidad"></label><input asp-for="Capacidad" class="form-control" />
+<label asp-for="Estado"></label><select asp-for="Estado" class="form-select">
+<option value="@EstadoAeronave.Operativa">Operativa</option><option value="@EstadoAeronave.Mantenimiento">Mantenimiento</option><option value="@EstadoAeronave.FueraDeServicio">Fuera de servicio</option>
+</select>
+<button type="submit" class="btn btn-primary">Guardar</button><a asp-action="Index">Volver</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
