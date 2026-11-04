@@ -19,6 +19,12 @@ public sealed class GenericRepository<T> : IGenericRepository<T> where T : class
         return await _dbSet.FindAsync(new object?[] { id }, cancellationToken);
     }
 
+    public async Task<T?> GetByKeysAsync(object[] keyValues, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(keyValues);
+        return await _dbSet.FindAsync(keyValues, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);

@@ -99,7 +99,7 @@ public sealed class CreateReservaCommandHandler(IUnitOfWork unitOfWork)
             reserva.Codigo = GenerateCode();
             try
             {
-                await unitOfWork.SaveChangesAsync(cancellationToken);
+                await unitOfWork.CompleteAsync(cancellationToken);
                 return Result<ReservaDto>.Success(new ReservaDto(
                     reserva.ReservaId,
                     reserva.Codigo,
@@ -180,7 +180,7 @@ public sealed class CancelReservaCommandHandler(IUnitOfWork unitOfWork)
             unitOfWork.Boletos.Update(boleto);
         }
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.CompleteAsync(cancellationToken);
         return Result.Success();
     }
 }

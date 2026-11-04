@@ -45,7 +45,7 @@ public sealed class UnitOfWork : IUnitOfWork
 
     public IGenericRepository<Vuelo> Vuelos => Repository<Vuelo>();
 
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public async Task<int> CompleteAsync(CancellationToken cancellationToken = default)
     {
         try
         {
