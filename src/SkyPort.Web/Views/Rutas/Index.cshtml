@@ -1,0 +1,29 @@
+@model IReadOnlyList<SkyPort.Application.Dtos.Rutas.RutaDto>
+@{
+    ViewData["Title"] = "Rutas";
+}
+
+<div class="mb-4"><h1 class="h2 mb-1">Rutas</h1><p class="text-secondary mb-0">Consulta los trayectos registrados.</p></div>
+
+<div class="card shadow-sm"><div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead><tr><th>Origen</th><th>Destino</th><th>Duración</th></tr></thead>
+        <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr><td colspan="3" class="text-center text-secondary py-4">No hay rutas registradas.</td></tr>
+        }
+        else
+        {
+            @foreach (var route in Model)
+            {
+                <tr>
+                    <th scope="row">@route.CodigoOrigen · @route.CiudadOrigen</th>
+                    <td>@route.CodigoDestino · @route.CiudadDestino</td>
+                    <td>@route.DuracionMinutos min</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div></div>
