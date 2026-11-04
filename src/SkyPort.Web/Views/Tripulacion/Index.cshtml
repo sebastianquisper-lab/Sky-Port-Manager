@@ -1,0 +1,12 @@
+@model IReadOnlyList<SkyPort.Application.Dtos.TripulacionVuelo.TripulacionVueloDto>
+@{ ViewData["Title"] = "Tripulacion"; }
+<h1>Asignaciones de tripulacion</h1>
+@if (Model.Count == 0) { <p>No hay asignaciones registradas.</p> }
+<table class="table">
+<thead><tr><th>Vuelo</th><th>Empleado</th><th>Rol a bordo</th></tr></thead>
+<tbody>
+@foreach (var row in Model)
+{
+<tr><td>@row.VueloId</td><td>@row.EmpleadoId</td><td>@row.RolAbordo</td></tr>
+}
+</tbody></table>
