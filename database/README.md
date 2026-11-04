@@ -106,17 +106,31 @@ Get-Content -Raw database/03_seed.sql | mysql -u root -p
 
 Después del reset siempre se vuelven a ejecutar **01_schema.sql → 02_identity.sql → 03_seed.sql**, en ese orden. Verificar nuevamente las tablas y los conteos.
 
-## Cuando cambia el esquema
+## Instalación, esquema y scaffolding
 
-1. Editar `database/01_schema.sql` para reflejar el nuevo modelo y ajustar `03_seed.sql` si el cambio afecta los datos de prueba. Actualizar también el [ERD](../docs/ERD.md) y los conteos de esta guía si corresponde.
-2. Avisar al grupo y recrear la base local con `99_reset.sql`, seguido de `01_schema.sql`, `02_identity.sql` y `03_seed.sql`.
-3. Verificar los conteos y la cadena de conexión local.
-4. Sebas o Johan ejecutan `tools/scaffold.ps1` para regenerar las entidades operativas y `SkyPortContext` desde la base ya preparada. No editar a mano los archivos generados ni crear migraciones.
+Son pasos distintos:
 
-**Estado actual:** `tools/scaffold.ps1` todavía no está en el repositorio; corresponde a S07. Una vez que S07 lo agregue, ejecutarlo desde la raíz con PowerShell:
+| Procedimiento | Qué hace | Qué no hace |
+| --- | --- | --- |
+| Instalación de base nueva | Ejecuta `01_schema.sql` → `02_identity.sql` → `03_seed.sql` sobre una instancia vacía. | No regenera C#. |
+| Actualización del esquema | Edita los scripts SQL y alinea la base local con esos cambios de forma controlada. | No exige resetear una base existente como único camino; `99_reset.sql` es opcional y solo para entornos locales que se puedan vaciar por completo. |
+| Scaffolding | Regenera entidades operativas y `SkyPortContext` desde la base ya alineada. | No incluye Identity ni escribe secretos. |
+
+### Cuando cambia el esquema
+
+1. Editar `database/01_schema.sql` (y `03_seed.sql` / [ERD](../docs/ERD.md) si corresponde).
+2. Avisar al grupo. Cada integrante alinea su base local con el nuevo script; quien pueda vaciar su entorno local puede usar la sección de reinicio, pero no es el procedimiento obligatorio para bases con datos de trabajo.
+3. Verificar la cadena local (`ConnectionStrings:DefaultConnection` en user-secrets; ver [CONFIGURACION.md](../docs/CONFIGURACION.md)).
+4. Sebas o Johan ejecutan el scaffolding seguro:
 
 ```powershell
 .\tools\scaffold.ps1
 ```
 
-Si cambia el modelo de Identity, regenerar además su script con el procedimiento de [IDENTITY.md](../docs/IDENTITY.md). Ese contexto tiene su propio modelo y no se sustituye por las entidades operativas del scaffold.
+Eso genera en `artifacts/scaffold-review/` (ignorado por Git, fuera de proyectos compilados), compara con los archivos versionados y **no los sobrescribe**. Tras revisar las diferencias:
+
+```powershell
+.\tools\scaffold.ps1 -Apply
+```
+
+No editar a mano las entidades ni `SkyPortContext`, ni crear migraciones Code First. Identity se mantiene aparte ([IDENTITY.md](../docs/IDENTITY.md)).
