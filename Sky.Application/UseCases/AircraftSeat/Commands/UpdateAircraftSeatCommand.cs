@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftSeat.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftSeatEntity = Sky.Domain.Entities.AircraftSeat;
 
+namespace Sky.Application.UseCases.AircraftSeat.Commands;
 
 public sealed record UpdateAircraftSeatCommand(
     int AircraftSeatId,
@@ -19,19 +18,19 @@ internal sealed class UpdateAircraftSeatHandler(IUnitOfWork uow)
 {
     public async Task<AircraftSeatEntity?> Handle(UpdateAircraftSeatCommand request, CancellationToken ct)
     {
-        var aircraftSeat = await uow.Repository<AircraftSeatEntity>().GetByIdAsync(request.AircraftSeatId, ct);
-        if (aircraftSeat is null) return null;
+        var entity = await uow.Repository<AircraftSeatEntity>().GetByIdAsync(request.AircraftSeatId, ct);
+        if (entity is null) return null;
 
-        aircraftSeat.AircraftId = request.AircraftId;
-        aircraftSeat.CabinClassId = request.CabinClassId;
-        aircraftSeat.SeatNumber = request.SeatNumber;
-        aircraftSeat.IsWindow = request.IsWindow;
-        aircraftSeat.IsAisle = request.IsAisle;
-        aircraftSeat.IsEmergencyExit = request.IsEmergencyExit;
+        entity.AircraftId = request.AircraftId;
+        entity.CabinClassId = request.CabinClassId;
+        entity.SeatNumber = request.SeatNumber;
+        entity.IsWindow = request.IsWindow;
+        entity.IsAisle = request.IsAisle;
+        entity.IsEmergencyExit = request.IsEmergencyExit;
 
-        uow.Repository<AircraftSeatEntity>().Update(aircraftSeat);
+        uow.Repository<AircraftSeatEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftSeat;
+        return entity;
     }
 }

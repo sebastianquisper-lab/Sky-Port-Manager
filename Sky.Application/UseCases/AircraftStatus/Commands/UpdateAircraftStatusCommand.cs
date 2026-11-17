@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftStatus.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftStatusEntity = Sky.Domain.Entities.AircraftStatus;
 
+namespace Sky.Application.UseCases.AircraftStatus.Commands;
 
 public sealed record UpdateAircraftStatusCommand(
     int AircraftStatusId,
@@ -15,15 +14,15 @@ internal sealed class UpdateAircraftStatusHandler(IUnitOfWork uow)
 {
     public async Task<AircraftStatusEntity?> Handle(UpdateAircraftStatusCommand request, CancellationToken ct)
     {
-        var aircraftStatus = await uow.Repository<AircraftStatusEntity>().GetByIdAsync(request.AircraftStatusId, ct);
-        if (aircraftStatus is null) return null;
+        var entity = await uow.Repository<AircraftStatusEntity>().GetByIdAsync(request.AircraftStatusId, ct);
+        if (entity is null) return null;
 
-        aircraftStatus.StatusName = request.StatusName;
-        aircraftStatus.Description = request.Description;
+        entity.StatusName = request.StatusName;
+        entity.Description = request.Description;
 
-        uow.Repository<AircraftStatusEntity>().Update(aircraftStatus);
+        uow.Repository<AircraftStatusEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftStatus;
+        return entity;
     }
 }

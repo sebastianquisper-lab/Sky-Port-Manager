@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftStatus.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftStatusEntity = Sky.Domain.Entities.AircraftStatus;
 
+namespace Sky.Application.UseCases.AircraftStatus.Commands;
 
 public sealed record CreateAircraftStatusCommand(
     string StatusName,
@@ -14,15 +13,15 @@ internal sealed class CreateAircraftStatusHandler(IUnitOfWork uow)
 {
     public async Task<AircraftStatusEntity> Handle(CreateAircraftStatusCommand request, CancellationToken ct)
     {
-        var aircraftStatus = new AircraftStatusEntity
+        var entity = new AircraftStatusEntity
         {
             StatusName = request.StatusName,
             Description = request.Description
         };
 
-        await uow.Repository<AircraftStatusEntity>().AddAsync(aircraftStatus, ct);
+        await uow.Repository<AircraftStatusEntity>().AddAsync(entity, ct);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftStatus;
+        return entity;
     }
 }

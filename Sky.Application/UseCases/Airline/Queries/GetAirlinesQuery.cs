@@ -1,17 +1,14 @@
-﻿namespace Sky.Application.UseCases.Airline.Queries;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AirlineEntity = Sky.Domain.Entities.Airline;
 
+namespace Sky.Application.UseCases.Airline.Queries;
 
-public sealed record GetAirlinesQuery : IRequest<List<AirlineEntity>>;
+public sealed record GetAirlinesQuery : IRequest<IReadOnlyList<AirlineEntity>>;
 
 internal sealed class GetAirlinesHandler(IUnitOfWork uow)
-    : IRequestHandler<GetAirlinesQuery, List<AirlineEntity>>
+    : IRequestHandler<GetAirlinesQuery, IReadOnlyList<AirlineEntity>>
 {
-    public Task<List<AirlineEntity>> Handle(GetAirlinesQuery request, CancellationToken ct)
-    {
-        return uow.Repository<AirlineEntity>().GetAllAsync(ct);
-    }
+    public Task<IReadOnlyList<AirlineEntity>> Handle(GetAirlinesQuery request, CancellationToken ct)
+        => uow.Repository<AirlineEntity>().GetAllAsync(ct);
 }

@@ -19,7 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Adapters\" />
+      <Folder Include="Adapters\Services\" />
+      <Folder Include="Controllers\" />
     </ItemGroup>
 
 </Project>

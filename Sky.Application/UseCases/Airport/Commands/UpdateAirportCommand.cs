@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.Airport.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AirportEntity = Sky.Domain.Entities.Airport;
 
+namespace Sky.Application.UseCases.Airport.Commands;
 
 public sealed record UpdateAirportCommand(
     int AirportId,
@@ -22,22 +21,22 @@ internal sealed class UpdateAirportHandler(IUnitOfWork uow)
 {
     public async Task<AirportEntity?> Handle(UpdateAirportCommand request, CancellationToken ct)
     {
-        var airport = await uow.Repository<AirportEntity>().GetByIdAsync(request.AirportId, ct);
-        if (airport is null) return null;
+        var entity = await uow.Repository<AirportEntity>().GetByIdAsync(request.AirportId, ct);
+        if (entity is null) return null;
 
-        airport.CityId = request.CityId;
-        airport.AirportName = request.AirportName;
-        airport.IataCode = request.IataCode;
-        airport.IcaoCode = request.IcaoCode;
-        airport.Address = request.Address;
-        airport.TimeZone = request.TimeZone;
-        airport.Latitude = request.Latitude;
-        airport.Longitude = request.Longitude;
-        airport.IsActive = request.IsActive;
+        entity.CityId = request.CityId;
+        entity.AirportName = request.AirportName;
+        entity.IataCode = request.IataCode;
+        entity.IcaoCode = request.IcaoCode;
+        entity.Address = request.Address;
+        entity.TimeZone = request.TimeZone;
+        entity.Latitude = request.Latitude;
+        entity.Longitude = request.Longitude;
+        entity.IsActive = request.IsActive;
 
-        uow.Repository<AirportEntity>().Update(airport);
+        uow.Repository<AirportEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return airport;
+        return entity;
     }
 }

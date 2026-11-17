@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftModel.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftModelEntity = Sky.Domain.Entities.AircraftModel;
 
+namespace Sky.Application.UseCases.AircraftModel.Commands;
 
 public sealed record CreateAircraftModelCommand(
     int ManufacturerId,
@@ -15,16 +14,16 @@ internal sealed class CreateAircraftModelHandler(IUnitOfWork uow)
 {
     public async Task<AircraftModelEntity> Handle(CreateAircraftModelCommand request, CancellationToken ct)
     {
-        var aircraftModel = new AircraftModelEntity
+        var entity = new AircraftModelEntity
         {
             ManufacturerId = request.ManufacturerId,
             ModelName = request.ModelName,
             Description = request.Description
         };
 
-        await uow.Repository<AircraftModelEntity>().AddAsync(aircraftModel, ct);
+        await uow.Repository<AircraftModelEntity>().AddAsync(entity, ct);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftModel;
+        return entity;
     }
 }

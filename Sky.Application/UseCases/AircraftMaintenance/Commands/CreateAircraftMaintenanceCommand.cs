@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftMaintenance.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftMaintenanceEntity = Sky.Domain.Entities.AircraftMaintenance;
 
+namespace Sky.Application.UseCases.AircraftMaintenance.Commands;
 
 public sealed record CreateAircraftMaintenanceCommand(
     int AircraftId,
@@ -20,7 +19,7 @@ internal sealed class CreateAircraftMaintenanceHandler(IUnitOfWork uow)
 {
     public async Task<AircraftMaintenanceEntity> Handle(CreateAircraftMaintenanceCommand request, CancellationToken ct)
     {
-        var aircraftMaintenance = new AircraftMaintenanceEntity
+        var entity = new AircraftMaintenanceEntity
         {
             AircraftId = request.AircraftId,
             MaintenanceTypeId = request.MaintenanceTypeId,
@@ -32,9 +31,9 @@ internal sealed class CreateAircraftMaintenanceHandler(IUnitOfWork uow)
             Notes = request.Notes
         };
 
-        await uow.Repository<AircraftMaintenanceEntity>().AddAsync(aircraftMaintenance, ct);
+        await uow.Repository<AircraftMaintenanceEntity>().AddAsync(entity, ct);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftMaintenance;
+        return entity;
     }
 }

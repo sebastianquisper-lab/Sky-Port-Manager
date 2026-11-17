@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AppRole.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AppRoleEntity = Sky.Domain.Entities.AppRole;
 
+namespace Sky.Application.UseCases.AppRole.Commands;
 
 public sealed record UpdateAppRoleCommand(
     int AppRoleId,
@@ -15,15 +14,15 @@ internal sealed class UpdateAppRoleHandler(IUnitOfWork uow)
 {
     public async Task<AppRoleEntity?> Handle(UpdateAppRoleCommand request, CancellationToken ct)
     {
-        var appRole = await uow.Repository<AppRoleEntity>().GetByIdAsync(request.AppRoleId, ct);
-        if (appRole is null) return null;
+        var entity = await uow.Repository<AppRoleEntity>().GetByIdAsync(request.AppRoleId, ct);
+        if (entity is null) return null;
 
-        appRole.RoleName = request.RoleName;
-        appRole.Description = request.Description;
+        entity.RoleName = request.RoleName;
+        entity.Description = request.Description;
 
-        uow.Repository<AppRoleEntity>().Update(appRole);
+        uow.Repository<AppRoleEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return appRole;
+        return entity;
     }
 }

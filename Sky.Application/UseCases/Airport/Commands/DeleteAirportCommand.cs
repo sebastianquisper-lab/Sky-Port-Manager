@@ -1,21 +1,21 @@
-﻿namespace Sky.Application.UseCases.Airport.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AirportEntity = Sky.Domain.Entities.Airport;
 
+namespace Sky.Application.UseCases.Airport.Commands;
 
-public sealed record DeleteAirportCommand(int AirportId) : IRequest<bool>;
+public sealed record DeleteAirportCommand(
+    int AirportId) : IRequest<bool>;
 
 internal sealed class DeleteAirportHandler(IUnitOfWork uow)
     : IRequestHandler<DeleteAirportCommand, bool>
 {
     public async Task<bool> Handle(DeleteAirportCommand request, CancellationToken ct)
     {
-        var airport = await uow.Repository<AirportEntity>().GetByIdAsync(request.AirportId, ct);
-        if (airport is null) return false;
+        var entity = await uow.Repository<AirportEntity>().GetByIdAsync(request.AirportId, ct);
+        if (entity is null) return false;
 
-        uow.Repository<AirportEntity>().Delete(airport);
+        uow.Repository<AirportEntity>().Delete(entity);
         await uow.SaveChangesAsync(ct);
 
         return true;

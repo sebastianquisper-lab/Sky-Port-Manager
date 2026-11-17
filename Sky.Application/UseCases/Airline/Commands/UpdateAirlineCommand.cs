@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.Airline.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AirlineEntity = Sky.Domain.Entities.Airline;
 
+namespace Sky.Application.UseCases.Airline.Commands;
 
 public sealed record UpdateAirlineCommand(
     int AirlineId,
@@ -20,20 +19,20 @@ internal sealed class UpdateAirlineHandler(IUnitOfWork uow)
 {
     public async Task<AirlineEntity?> Handle(UpdateAirlineCommand request, CancellationToken ct)
     {
-        var airline = await uow.Repository<AirlineEntity>().GetByIdAsync(request.AirlineId, ct);
-        if (airline is null) return null;
+        var entity = await uow.Repository<AirlineEntity>().GetByIdAsync(request.AirlineId, ct);
+        if (entity is null) return null;
 
-        airline.CountryId = request.CountryId;
-        airline.AirlineName = request.AirlineName;
-        airline.IataCode = request.IataCode;
-        airline.IcaoCode = request.IcaoCode;
-        airline.ContactEmail = request.ContactEmail;
-        airline.ContactPhone = request.ContactPhone;
-        airline.IsActive = request.IsActive;
+        entity.CountryId = request.CountryId;
+        entity.AirlineName = request.AirlineName;
+        entity.IataCode = request.IataCode;
+        entity.IcaoCode = request.IcaoCode;
+        entity.ContactEmail = request.ContactEmail;
+        entity.ContactPhone = request.ContactPhone;
+        entity.IsActive = request.IsActive;
 
-        uow.Repository<AirlineEntity>().Update(airline);
+        uow.Repository<AirlineEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return airline;
+        return entity;
     }
 }

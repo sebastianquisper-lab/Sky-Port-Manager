@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftSeat.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftSeatEntity = Sky.Domain.Entities.AircraftSeat;
 
+namespace Sky.Application.UseCases.AircraftSeat.Commands;
 
 public sealed record CreateAircraftSeatCommand(
     int AircraftId,
@@ -18,7 +17,7 @@ internal sealed class CreateAircraftSeatHandler(IUnitOfWork uow)
 {
     public async Task<AircraftSeatEntity> Handle(CreateAircraftSeatCommand request, CancellationToken ct)
     {
-        var aircraftSeat = new AircraftSeatEntity
+        var entity = new AircraftSeatEntity
         {
             AircraftId = request.AircraftId,
             CabinClassId = request.CabinClassId,
@@ -28,9 +27,9 @@ internal sealed class CreateAircraftSeatHandler(IUnitOfWork uow)
             IsEmergencyExit = request.IsEmergencyExit
         };
 
-        await uow.Repository<AircraftSeatEntity>().AddAsync(aircraftSeat, ct);
+        await uow.Repository<AircraftSeatEntity>().AddAsync(entity, ct);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftSeat;
+        return entity;
     }
 }

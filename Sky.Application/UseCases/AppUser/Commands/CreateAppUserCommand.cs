@@ -1,38 +1,43 @@
-﻿namespace Sky.Application.UseCases.AppUser.Commands;
-
 using MediatR;
+using Sky.Application.Ports;
 using Sky.Domain.Ports;
 using AppUserEntity = Sky.Domain.Entities.AppUser;
 
+namespace Sky.Application.UseCases.AppUser.Commands;
 
+/// <summary>
+/// La unicidad de username y email (sin distinguir mayúsculas) la garantizan los índices
+/// uq_user_username y uq_user_email de PostgreSQL.
+/// </summary>
 public sealed record CreateAppUserCommand(
     int AppRoleId,
     int? EmployeeId,
     string Username,
     string Email,
-    string PasswordHash,
-    DateTime? LastLoginUtc) : IRequest<AppUserEntity>;
+    string Password) : IRequest<AppUserEntity>;
 
-internal sealed class CreateAppUserHandler(IUnitOfWork uow)
+internal sealed class CreateAppUserHandler(
+    IUnitOfWork uow,
+    IDateTimeProvider clock,
+    IPasswordHasher hasher)
     : IRequestHandler<CreateAppUserCommand, AppUserEntity>
 {
     public async Task<AppUserEntity> Handle(CreateAppUserCommand request, CancellationToken ct)
     {
-        var appUser = new AppUserEntity
+        var entity = new AppUserEntity
         {
             AppRoleId = request.AppRoleId,
             EmployeeId = request.EmployeeId,
-            Username = request.Username,
-            Email = request.Email,
-            PasswordHash = request.PasswordHash,
+            Username = request.Username.Trim(),
+            Email = request.Email.Trim(),
+            PasswordHash = hasher.Hash(request.Password),
             IsActive = true,
-            LastLoginUtc = request.LastLoginUtc,
-            CreatedAtUtc = DateTime.UtcNow
+            CreatedAtUtc = clock.UtcNow
         };
 
-        await uow.Repository<AppUserEntity>().AddAsync(appUser, ct);
+        await uow.Repository<AppUserEntity>().AddAsync(entity, ct);
         await uow.SaveChangesAsync(ct);
 
-        return appUser;
+        return entity;
     }
 }

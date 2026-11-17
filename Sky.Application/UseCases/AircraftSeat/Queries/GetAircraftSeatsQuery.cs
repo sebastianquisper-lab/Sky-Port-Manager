@@ -1,17 +1,14 @@
-﻿namespace Sky.Application.UseCases.AircraftSeat.Queries;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftSeatEntity = Sky.Domain.Entities.AircraftSeat;
 
+namespace Sky.Application.UseCases.AircraftSeat.Queries;
 
-public sealed record GetAircraftSeatsQuery : IRequest<List<AircraftSeatEntity>>;
+public sealed record GetAircraftSeatsQuery : IRequest<IReadOnlyList<AircraftSeatEntity>>;
 
 internal sealed class GetAircraftSeatsHandler(IUnitOfWork uow)
-    : IRequestHandler<GetAircraftSeatsQuery, List<AircraftSeatEntity>>
+    : IRequestHandler<GetAircraftSeatsQuery, IReadOnlyList<AircraftSeatEntity>>
 {
-    public Task<List<AircraftSeatEntity>> Handle(GetAircraftSeatsQuery request, CancellationToken ct)
-    {
-        return uow.Repository<AircraftSeatEntity>().GetAllAsync(ct);
-    }
+    public Task<IReadOnlyList<AircraftSeatEntity>> Handle(GetAircraftSeatsQuery request, CancellationToken ct)
+        => uow.Repository<AircraftSeatEntity>().GetAllAsync(ct);
 }

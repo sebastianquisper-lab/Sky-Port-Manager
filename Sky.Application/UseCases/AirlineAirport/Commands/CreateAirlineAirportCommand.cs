@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AirlineAirport.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AirlineAirportEntity = Sky.Domain.Entities.AirlineAirport;
 
+namespace Sky.Application.UseCases.AirlineAirport.Commands;
 
 public sealed record CreateAirlineAirportCommand(
     int AirlineId,
@@ -16,7 +15,7 @@ internal sealed class CreateAirlineAirportHandler(IUnitOfWork uow)
 {
     public async Task<AirlineAirportEntity> Handle(CreateAirlineAirportCommand request, CancellationToken ct)
     {
-        var airlineAirport = new AirlineAirportEntity
+        var entity = new AirlineAirportEntity
         {
             AirlineId = request.AirlineId,
             AirportId = request.AirportId,
@@ -24,9 +23,9 @@ internal sealed class CreateAirlineAirportHandler(IUnitOfWork uow)
             IsHub = request.IsHub
         };
 
-        await uow.Repository<AirlineAirportEntity>().AddAsync(airlineAirport, ct);
+        await uow.Repository<AirlineAirportEntity>().AddAsync(entity, ct);
         await uow.SaveChangesAsync(ct);
 
-        return airlineAirport;
+        return entity;
     }
 }

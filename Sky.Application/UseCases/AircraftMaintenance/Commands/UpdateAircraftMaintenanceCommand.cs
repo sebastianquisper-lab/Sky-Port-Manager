@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftMaintenance.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftMaintenanceEntity = Sky.Domain.Entities.AircraftMaintenance;
 
+namespace Sky.Application.UseCases.AircraftMaintenance.Commands;
 
 public sealed record UpdateAircraftMaintenanceCommand(
     int MaintenanceId,
@@ -21,21 +20,21 @@ internal sealed class UpdateAircraftMaintenanceHandler(IUnitOfWork uow)
 {
     public async Task<AircraftMaintenanceEntity?> Handle(UpdateAircraftMaintenanceCommand request, CancellationToken ct)
     {
-        var aircraftMaintenance = await uow.Repository<AircraftMaintenanceEntity>().GetByIdAsync(request.MaintenanceId, ct);
-        if (aircraftMaintenance is null) return null;
+        var entity = await uow.Repository<AircraftMaintenanceEntity>().GetByIdAsync(request.MaintenanceId, ct);
+        if (entity is null) return null;
 
-        aircraftMaintenance.AircraftId = request.AircraftId;
-        aircraftMaintenance.MaintenanceTypeId = request.MaintenanceTypeId;
-        aircraftMaintenance.AirportId = request.AirportId;
-        aircraftMaintenance.TechnicianEmployeeId = request.TechnicianEmployeeId;
-        aircraftMaintenance.Status = request.Status;
-        aircraftMaintenance.StartDateUtc = request.StartDateUtc;
-        aircraftMaintenance.EndDateUtc = request.EndDateUtc;
-        aircraftMaintenance.Notes = request.Notes;
+        entity.AircraftId = request.AircraftId;
+        entity.MaintenanceTypeId = request.MaintenanceTypeId;
+        entity.AirportId = request.AirportId;
+        entity.TechnicianEmployeeId = request.TechnicianEmployeeId;
+        entity.Status = request.Status;
+        entity.StartDateUtc = request.StartDateUtc;
+        entity.EndDateUtc = request.EndDateUtc;
+        entity.Notes = request.Notes;
 
-        uow.Repository<AircraftMaintenanceEntity>().Update(aircraftMaintenance);
+        uow.Repository<AircraftMaintenanceEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftMaintenance;
+        return entity;
     }
 }

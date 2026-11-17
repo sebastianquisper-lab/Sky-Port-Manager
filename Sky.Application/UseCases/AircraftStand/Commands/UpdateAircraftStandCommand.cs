@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftStand.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftStandEntity = Sky.Domain.Entities.AircraftStand;
 
+namespace Sky.Application.UseCases.AircraftStand.Commands;
 
 public sealed record UpdateAircraftStandCommand(
     int StandId,
@@ -17,17 +16,17 @@ internal sealed class UpdateAircraftStandHandler(IUnitOfWork uow)
 {
     public async Task<AircraftStandEntity?> Handle(UpdateAircraftStandCommand request, CancellationToken ct)
     {
-        var aircraftStand = await uow.Repository<AircraftStandEntity>().GetByIdAsync(request.StandId, ct);
-        if (aircraftStand is null) return null;
+        var entity = await uow.Repository<AircraftStandEntity>().GetByIdAsync(request.StandId, ct);
+        if (entity is null) return null;
 
-        aircraftStand.AirportId = request.AirportId;
-        aircraftStand.StandCode = request.StandCode;
-        aircraftStand.IsRemote = request.IsRemote;
-        aircraftStand.IsActive = request.IsActive;
+        entity.AirportId = request.AirportId;
+        entity.StandCode = request.StandCode;
+        entity.IsRemote = request.IsRemote;
+        entity.IsActive = request.IsActive;
 
-        uow.Repository<AircraftStandEntity>().Update(aircraftStand);
+        uow.Repository<AircraftStandEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftStand;
+        return entity;
     }
 }

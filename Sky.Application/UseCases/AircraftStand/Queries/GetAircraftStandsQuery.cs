@@ -1,17 +1,14 @@
-﻿namespace Sky.Application.UseCases.AircraftStand.Queries;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftStandEntity = Sky.Domain.Entities.AircraftStand;
 
+namespace Sky.Application.UseCases.AircraftStand.Queries;
 
-public sealed record GetAircraftStandsQuery : IRequest<List<AircraftStandEntity>>;
+public sealed record GetAircraftStandsQuery : IRequest<IReadOnlyList<AircraftStandEntity>>;
 
 internal sealed class GetAircraftStandsHandler(IUnitOfWork uow)
-    : IRequestHandler<GetAircraftStandsQuery, List<AircraftStandEntity>>
+    : IRequestHandler<GetAircraftStandsQuery, IReadOnlyList<AircraftStandEntity>>
 {
-    public Task<List<AircraftStandEntity>> Handle(GetAircraftStandsQuery request, CancellationToken ct)
-    {
-        return uow.Repository<AircraftStandEntity>().GetAllAsync(ct);
-    }
+    public Task<IReadOnlyList<AircraftStandEntity>> Handle(GetAircraftStandsQuery request, CancellationToken ct)
+        => uow.Repository<AircraftStandEntity>().GetAllAsync(ct);
 }

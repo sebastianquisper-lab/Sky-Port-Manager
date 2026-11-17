@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.AircraftManufacturer.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftManufacturerEntity = Sky.Domain.Entities.AircraftManufacturer;
 
+namespace Sky.Application.UseCases.AircraftManufacturer.Commands;
 
 public sealed record UpdateAircraftManufacturerCommand(
     int ManufacturerId,
@@ -14,14 +13,14 @@ internal sealed class UpdateAircraftManufacturerHandler(IUnitOfWork uow)
 {
     public async Task<AircraftManufacturerEntity?> Handle(UpdateAircraftManufacturerCommand request, CancellationToken ct)
     {
-        var aircraftManufacturer = await uow.Repository<AircraftManufacturerEntity>().GetByIdAsync(request.ManufacturerId, ct);
-        if (aircraftManufacturer is null) return null;
+        var entity = await uow.Repository<AircraftManufacturerEntity>().GetByIdAsync(request.ManufacturerId, ct);
+        if (entity is null) return null;
 
-        aircraftManufacturer.ManufacturerName = request.ManufacturerName;
+        entity.ManufacturerName = request.ManufacturerName;
 
-        uow.Repository<AircraftManufacturerEntity>().Update(aircraftManufacturer);
+        uow.Repository<AircraftManufacturerEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return aircraftManufacturer;
+        return entity;
     }
 }

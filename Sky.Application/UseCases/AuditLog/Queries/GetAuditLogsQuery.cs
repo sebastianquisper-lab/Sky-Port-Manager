@@ -1,17 +1,14 @@
-﻿namespace Sky.Application.UseCases.AuditLog.Queries;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AuditLogEntity = Sky.Domain.Entities.AuditLog;
 
+namespace Sky.Application.UseCases.AuditLog.Queries;
 
-public sealed record GetAuditLogsQuery : IRequest<List<AuditLogEntity>>;
+public sealed record GetAuditLogsQuery : IRequest<IReadOnlyList<AuditLogEntity>>;
 
 internal sealed class GetAuditLogsHandler(IUnitOfWork uow)
-    : IRequestHandler<GetAuditLogsQuery, List<AuditLogEntity>>
+    : IRequestHandler<GetAuditLogsQuery, IReadOnlyList<AuditLogEntity>>
 {
-    public Task<List<AuditLogEntity>> Handle(GetAuditLogsQuery request, CancellationToken ct)
-    {
-        return uow.Repository<AuditLogEntity>().GetAllAsync(ct);
-    }
+    public Task<IReadOnlyList<AuditLogEntity>> Handle(GetAuditLogsQuery request, CancellationToken ct)
+        => uow.Repository<AuditLogEntity>().GetAllAsync(ct);
 }

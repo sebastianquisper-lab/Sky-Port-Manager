@@ -1,39 +1,40 @@
-﻿namespace Sky.Application.UseCases.AuditLog.Commands;
-
 using MediatR;
+using Sky.Application.Ports;
 using Sky.Domain.Ports;
 using AuditLogEntity = Sky.Domain.Entities.AuditLog;
 
+namespace Sky.Application.UseCases.AuditLog.Commands;
 
 public sealed record CreateAuditLogCommand(
-    int? UserId,
     string TableName,
     string RecordId,
     string Action,
     string? OldValues,
-    string? NewValues,
-    string? IpAddress) : IRequest<AuditLogEntity>;
+    string? NewValues) : IRequest<AuditLogEntity>;
 
-internal sealed class CreateAuditLogHandler(IUnitOfWork uow)
+internal sealed class CreateAuditLogHandler(
+    IUnitOfWork uow,
+    IDateTimeProvider clock,
+    ICurrentUserService currentUser)
     : IRequestHandler<CreateAuditLogCommand, AuditLogEntity>
 {
     public async Task<AuditLogEntity> Handle(CreateAuditLogCommand request, CancellationToken ct)
     {
-        var auditLog = new AuditLogEntity
+        var entity = new AuditLogEntity
         {
-            UserId = request.UserId,
+            UserId = currentUser.UserId,
             TableName = request.TableName,
             RecordId = request.RecordId,
             Action = request.Action,
             OldValues = request.OldValues,
             NewValues = request.NewValues,
-            IpAddress = request.IpAddress,
-            CreatedAtUtc = DateTime.UtcNow
+            IpAddress = currentUser.IpAddress,
+            CreatedAtUtc = clock.UtcNow
         };
 
-        await uow.Repository<AuditLogEntity>().AddAsync(auditLog, ct);
+        await uow.Repository<AuditLogEntity>().AddAsync(entity, ct);
         await uow.SaveChangesAsync(ct);
 
-        return auditLog;
+        return entity;
     }
 }

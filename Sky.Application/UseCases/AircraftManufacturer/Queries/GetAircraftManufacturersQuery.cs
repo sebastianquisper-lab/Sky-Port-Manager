@@ -1,17 +1,14 @@
-﻿namespace Sky.Application.UseCases.AircraftManufacturer.Queries;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftManufacturerEntity = Sky.Domain.Entities.AircraftManufacturer;
 
+namespace Sky.Application.UseCases.AircraftManufacturer.Queries;
 
-public sealed record GetAircraftManufacturersQuery : IRequest<List<AircraftManufacturerEntity>>;
+public sealed record GetAircraftManufacturersQuery : IRequest<IReadOnlyList<AircraftManufacturerEntity>>;
 
 internal sealed class GetAircraftManufacturersHandler(IUnitOfWork uow)
-    : IRequestHandler<GetAircraftManufacturersQuery, List<AircraftManufacturerEntity>>
+    : IRequestHandler<GetAircraftManufacturersQuery, IReadOnlyList<AircraftManufacturerEntity>>
 {
-    public Task<List<AircraftManufacturerEntity>> Handle(GetAircraftManufacturersQuery request, CancellationToken ct)
-    {
-        return uow.Repository<AircraftManufacturerEntity>().GetAllAsync(ct);
-    }
+    public Task<IReadOnlyList<AircraftManufacturerEntity>> Handle(GetAircraftManufacturersQuery request, CancellationToken ct)
+        => uow.Repository<AircraftManufacturerEntity>().GetAllAsync(ct);
 }

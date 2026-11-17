@@ -1,9 +1,8 @@
-﻿namespace Sky.Application.UseCases.Aircraft.Commands;
-
 using MediatR;
 using Sky.Domain.Ports;
 using AircraftEntity = Sky.Domain.Entities.Aircraft;
 
+namespace Sky.Application.UseCases.Aircraft.Commands;
 
 public sealed record UpdateAircraftCommand(
     int AircraftId,
@@ -21,21 +20,21 @@ internal sealed class UpdateAircraftHandler(IUnitOfWork uow)
 {
     public async Task<AircraftEntity?> Handle(UpdateAircraftCommand request, CancellationToken ct)
     {
-        var aircraft = await uow.Repository<AircraftEntity>().GetByIdAsync(request.AircraftId, ct);
-        if (aircraft is null) return null;
+        var entity = await uow.Repository<AircraftEntity>().GetByIdAsync(request.AircraftId, ct);
+        if (entity is null) return null;
 
-        aircraft.AirlineId = request.AirlineId;
-        aircraft.ModelId = request.ModelId;
-        aircraft.AircraftStatusId = request.AircraftStatusId;
-        aircraft.RegistrationCode = request.RegistrationCode;
-        aircraft.SerialNumber = request.SerialNumber;
-        aircraft.SeatCapacity = request.SeatCapacity;
-        aircraft.ManufactureYear = request.ManufactureYear;
-        aircraft.IsActive = request.IsActive;
+        entity.AirlineId = request.AirlineId;
+        entity.ModelId = request.ModelId;
+        entity.AircraftStatusId = request.AircraftStatusId;
+        entity.RegistrationCode = request.RegistrationCode;
+        entity.SerialNumber = request.SerialNumber;
+        entity.SeatCapacity = request.SeatCapacity;
+        entity.ManufactureYear = request.ManufactureYear;
+        entity.IsActive = request.IsActive;
 
-        uow.Repository<AircraftEntity>().Update(aircraft);
+        uow.Repository<AircraftEntity>().Update(entity);
         await uow.SaveChangesAsync(ct);
 
-        return aircraft;
+        return entity;
     }
 }
