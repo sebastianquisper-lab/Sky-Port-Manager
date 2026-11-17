@@ -1,6 +1,0 @@
-@Sky_Port_Manager_HostAddress = http://localhost:5062
-
-GET {{Sky_Port_Manager_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
