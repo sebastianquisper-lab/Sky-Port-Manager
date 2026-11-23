@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Sky.Application.Ports;
 
 namespace Sky.Infrastructure.Adapters.Services;
