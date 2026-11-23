@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sky.Application", "Sky.Appl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sky.Infrastructure", "Sky.Infrastructure\Sky.Infrastructure.csproj", "{A6E99C8F-5B47-4473-A3F0-96238D751F9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sky.API", "Sky.API\Sky.API.csproj", "{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{A6E99C8F-5B47-4473-A3F0-96238D751F9D}.Release|x64.Build.0 = Release|Any CPU
 		{A6E99C8F-5B47-4473-A3F0-96238D751F9D}.Release|x86.ActiveCfg = Release|Any CPU
 		{A6E99C8F-5B47-4473-A3F0-96238D751F9D}.Release|x86.Build.0 = Release|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Debug|x64.Build.0 = Debug|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Debug|x86.Build.0 = Debug|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Release|x64.ActiveCfg = Release|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Release|x64.Build.0 = Release|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE4A2CD5-7689-4D16-AB4C-C7A10B05D50C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
