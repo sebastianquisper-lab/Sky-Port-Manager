@@ -5,12 +5,12 @@ using Sky.Domain.Ports;
 using CheckInCounterEntity = Sky.Domain.Entities.CheckInCounter;
 
 
-public sealed record GetCheckInCountersQuery : IRequest<List<CheckInCounterEntity>>;
+public sealed record GetCheckInCountersQuery : IRequest<IReadOnlyList<CheckInCounterEntity>>;
 
 internal sealed class GetCheckInCountersHandler(IUnitOfWork uow)
-    : IRequestHandler<GetCheckInCountersQuery, List<CheckInCounterEntity>>
+    : IRequestHandler<GetCheckInCountersQuery, IReadOnlyList<CheckInCounterEntity>>
 {
-    public Task<List<CheckInCounterEntity>> Handle(GetCheckInCountersQuery request, CancellationToken ct)
+    public Task<IReadOnlyList<CheckInCounterEntity>> Handle(GetCheckInCountersQuery request, CancellationToken ct)
     {
         return uow.Repository<CheckInCounterEntity>().GetAllAsync(ct);
     }

@@ -5,12 +5,12 @@ using Sky.Domain.Ports;
 using BoardingEntity = Sky.Domain.Entities.Boarding;
 
 
-public sealed record GetBoardingsQuery : IRequest<List<BoardingEntity>>;
+public sealed record GetBoardingsQuery : IRequest<IReadOnlyList<BoardingEntity>>;
 
 internal sealed class GetBoardingsHandler(IUnitOfWork uow)
-    : IRequestHandler<GetBoardingsQuery, List<BoardingEntity>>
+    : IRequestHandler<GetBoardingsQuery, IReadOnlyList<BoardingEntity>>
 {
-    public Task<List<BoardingEntity>> Handle(GetBoardingsQuery request, CancellationToken ct)
+    public Task<IReadOnlyList<BoardingEntity>> Handle(GetBoardingsQuery request, CancellationToken ct)
     {
         return uow.Repository<BoardingEntity>().GetAllAsync(ct);
     }

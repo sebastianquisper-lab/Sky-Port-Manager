@@ -5,12 +5,12 @@ using Sky.Domain.Ports;
 using BoardingPassEntity = Sky.Domain.Entities.BoardingPass;
 
 
-public sealed record GetBoardingPassesQuery : IRequest<List<BoardingPassEntity>>;
+public sealed record GetBoardingPassesQuery : IRequest<IReadOnlyList<BoardingPassEntity>>;
 
 internal sealed class GetBoardingPassesHandler(IUnitOfWork uow)
-    : IRequestHandler<GetBoardingPassesQuery, List<BoardingPassEntity>>
+    : IRequestHandler<GetBoardingPassesQuery, IReadOnlyList<BoardingPassEntity>>
 {
-    public Task<List<BoardingPassEntity>> Handle(GetBoardingPassesQuery request, CancellationToken ct)
+    public Task<IReadOnlyList<BoardingPassEntity>> Handle(GetBoardingPassesQuery request, CancellationToken ct)
     {
         return uow.Repository<BoardingPassEntity>().GetAllAsync(ct);
     }

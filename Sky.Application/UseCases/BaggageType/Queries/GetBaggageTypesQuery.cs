@@ -5,12 +5,12 @@ using Sky.Domain.Ports;
 using BaggageTypeEntity = Sky.Domain.Entities.BaggageType;
 
 
-public sealed record GetBaggageTypesQuery : IRequest<List<BaggageTypeEntity>>;
+public sealed record GetBaggageTypesQuery : IRequest<IReadOnlyList<BaggageTypeEntity>>;
 
 internal sealed class GetBaggageTypesHandler(IUnitOfWork uow)
-    : IRequestHandler<GetBaggageTypesQuery, List<BaggageTypeEntity>>
+    : IRequestHandler<GetBaggageTypesQuery, IReadOnlyList<BaggageTypeEntity>>
 {
-    public Task<List<BaggageTypeEntity>> Handle(GetBaggageTypesQuery request, CancellationToken ct)
+    public Task<IReadOnlyList<BaggageTypeEntity>> Handle(GetBaggageTypesQuery request, CancellationToken ct)
     {
         return uow.Repository<BaggageTypeEntity>().GetAllAsync(ct);
     }

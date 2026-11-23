@@ -5,12 +5,12 @@ using Sky.Domain.Ports;
 using BookingEntity = Sky.Domain.Entities.Booking;
 
 
-public sealed record GetBookingsQuery : IRequest<List<BookingEntity>>;
+public sealed record GetBookingsQuery : IRequest<IReadOnlyList<BookingEntity>>;
 
 internal sealed class GetBookingsHandler(IUnitOfWork uow)
-    : IRequestHandler<GetBookingsQuery, List<BookingEntity>>
+    : IRequestHandler<GetBookingsQuery, IReadOnlyList<BookingEntity>>
 {
-    public Task<List<BookingEntity>> Handle(GetBookingsQuery request, CancellationToken ct)
+    public Task<IReadOnlyList<BookingEntity>> Handle(GetBookingsQuery request, CancellationToken ct)
     {
         return uow.Repository<BookingEntity>().GetAllAsync(ct);
     }
