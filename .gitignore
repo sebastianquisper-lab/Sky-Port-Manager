@@ -16,6 +16,10 @@
 # Local configuration and secrets
 appsettings.Development.json
 secrets.json
+.env
+.env.*
+*.dump
+*.backup
 
 # Logs and test results
 *.log

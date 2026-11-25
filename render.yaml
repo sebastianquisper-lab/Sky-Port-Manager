@@ -1,0 +1,47 @@
+# Crear este Blueprint primero; después crear el del repositorio del frontend.
+services:
+  - type: web
+    name: skyport-api
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_FORWARDEDHEADERS_ENABLED
+        value: "true"
+      - key: Jwt__Key
+        generateValue: true
+      - key: Jwt__Issuer
+        value: SkyPort
+      - key: Jwt__Audience
+        value: SkyPortClients
+      - key: PGHOST
+        fromDatabase:
+          name: skyport-db
+          property: host
+      - key: PGPORT
+        fromDatabase:
+          name: skyport-db
+          property: port
+      - key: PGDATABASE
+        fromDatabase:
+          name: skyport-db
+          property: database
+      - key: PGUSER
+        fromDatabase:
+          name: skyport-db
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: skyport-db
+          property: password
+
+databases:
+  - name: skyport-db
+    plan: free
+    region: oregon
+    databaseName: skyport
+    user: skyport

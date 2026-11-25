@@ -1,0 +1,13 @@
+.git
+.idea
+.vs
+**/bin
+**/obj
+**/appsettings.Development.json
+**/secrets.json
+**/.env*
+**/*.log
+**/*.dump
+**/*.backup
+TestResults
+artifacts

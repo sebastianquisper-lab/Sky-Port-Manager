@@ -1,5 +1,13 @@
 ﻿# SkyPort Manager
-Sistema de gestión aeroportuaria desarrollado con .NET, Entity Framework Core y SQL Server.
+Sistema de gestión aeroportuaria desarrollado con .NET 10, Entity Framework Core y PostgreSQL.
+
+## Despliegue en Render
+
+La API y el frontend se publican como servicios separados. Este repositorio incluye `Dockerfile` y `render.yaml` para desplegar la API y crear una base PostgreSQL, sin modificar `Program.cs` ni reorganizar los proyectos.
+
+**[Pasos para desplegar, importar la base y conectar el frontend](RENDER.md)**
+
+El Blueprint crea una base vacía: hay que importar el esquema y los datos originales del equipo. El README no contiene la base de datos y este repositorio no incluye scripts SQL ni migraciones para reconstruirla.
 
 ## Interfaz web (frontend)
 
